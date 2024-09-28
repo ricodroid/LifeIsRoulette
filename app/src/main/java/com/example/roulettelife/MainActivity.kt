@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.roulettelife.presentation.home.RouletteScreen
+import com.example.roulettelife.presentation.rouletteSettings.RouletteSettingsScreen
 import com.example.roulettelife.ui.theme.RouletteLifeTheme
 
 
@@ -22,7 +23,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     // ここで RouletteScreen を呼び出してルーレット画面を表示
-                    RouletteScreen()
+//                    RouletteScreen()
+                    RouletteSettingsScreen()
                 }
             }
         }
