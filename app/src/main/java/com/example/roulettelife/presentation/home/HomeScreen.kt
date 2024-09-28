@@ -1,30 +1,20 @@
 package com.example.roulettelife.presentation.home
 
+import android.text.TextPaint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -75,21 +65,62 @@ fun RouletteScreen() {
             Canvas(modifier = Modifier.size(250.dp)) {
                 // ルーレットの回転を描画
                 val sliceAngle = 360f / options.size
+                val radius = size.minDimension / 2
+
+                // 文字を描くためのTextPaintを作成
+                val textPaint = TextPaint().apply {
+                    color = android.graphics.Color.BLACK
+                    textSize = 40f
+                    textAlign = android.graphics.Paint.Align.CENTER
+                }
+
                 rotate(rotation) {
                     for (i in options.indices) {
+                        // セクションの色を描画
                         drawArc(
-                            color = colors[i],  // ランダムに生成された色を使う
+                            color = colors[i],
                             startAngle = i * sliceAngle,
                             sweepAngle = sliceAngle,
                             useCenter = true
                         )
+
+                        // 各セクションの中心角度を計算
+                        val textAngle = i * sliceAngle + sliceAngle / 2
+                        val textRadius = radius * 0.6f  // テキストの配置位置
+
+                        // テキストの位置を計算
+                        val x = size.center.x + textRadius * kotlin.math.cos(Math.toRadians(textAngle.toDouble())).toFloat()
+                        val y = size.center.y + textRadius * kotlin.math.sin(Math.toRadians(textAngle.toDouble())).toFloat()
+
+                        // テキストの最大幅を設定 (セクション内に収めるため)
+                        val maxTextWidth = textRadius * 2  // テキストの最大幅
+
+                        // テキストを折り返しながら描画する
+                        val wrappedText = StringBuilder()
+                        var start = 0
+                        while (start < options[i].length) {
+                            val count = textPaint.breakText(options[i], start, options[i].length, true, maxTextWidth, null)
+                            wrappedText.append(options[i], start, start + count)
+                            wrappedText.append("\n")
+                            start += count
+                        }
+
+                        // テキストを描画
+                        drawContext.canvas.nativeCanvas.drawText(
+                            wrappedText.toString(),
+                            x,
+                            y,
+                            textPaint
+                        )
+
+
                     }
                 }
             }
 
             // ポインターを描画するための別のCanvas
             Canvas(modifier = Modifier
-                .size(320.dp)  // ルーレットより少し大きいサイズを指定
+                .size(320.dp)
                 .offset(y = (-4).dp)  // ポインターをルーレットの上外側に配置
             ) {
                 val pointerPath = Path().apply {
