@@ -15,16 +15,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.roulettelife.data.local.RoulettePreferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @Composable
-fun RouletteScreen() {
+fun HomeScreen(
+    onSettingButtonClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val roulettePreferences = remember { RoulettePreferences(context) }
+
     // ルーレットの選択肢
-    val options = listOf("踊る", "無駄な買い物をする", "猫の写真を取る", "イベントに参加する", "勉強する")
+    val options by remember { mutableStateOf(roulettePreferences.getRouletteItems() ) }
 
     // ルーレットの回転角度を保持する状態
     var rotation by remember { mutableStateOf(0f) }
@@ -156,11 +163,20 @@ fun RouletteScreen() {
         ) {
             Text(text = if (isSpinning) "Spinning..." else "Spin the Roulette")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 設定画面に移動するボタン
+        Button(onClick = { onSettingButtonClick() }) {
+            Text(text = "Go to Settings")
+        }
     }
 }
 
-@Preview
-@Composable
-fun PreviewRouletteScreen() {
-    RouletteScreen()
-}
+//@Preview
+//@Composable
+//fun PreviewRouletteScreen() {
+//    HomeScreen(
+//
+//    )
+//}

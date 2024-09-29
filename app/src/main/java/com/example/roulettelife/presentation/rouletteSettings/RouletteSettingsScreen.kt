@@ -10,15 +10,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.roulettelife.data.local.RoulettePreferences
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouletteSettingsScreen() {
+    val context = LocalContext.current
+    val roulettePreferences = remember { RoulettePreferences(context) }
     // ルーレットのリスト項目を保持する状態
     // このrouletteItemsは、いつかはAPI化するけど最初のうちは端末内に保存する
-    var rouletteItems by remember { mutableStateOf(listOf("踊る", "無駄な買い物をする", "猫の写真を取る")) }
+    // SharedPreferences から初期値を取得
+    var rouletteItems by remember { mutableStateOf(roulettePreferences.getRouletteItems()) }
     var newItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -69,7 +74,9 @@ fun RouletteSettingsScreen() {
                             Button(
                                 onClick = {
                                     if (newItem.isNotBlank()) {
-                                        rouletteItems = rouletteItems + newItem
+                                        // 新しいアイテムを追加し、SharedPreferences に保存
+                                        roulettePreferences.addRouletteItem(newItem)
+                                        rouletteItems = roulettePreferences.getRouletteItems()  // リストを更新
                                         newItem = ""  // 入力フィールドをクリア
                                         showDialog = false
                                     }
