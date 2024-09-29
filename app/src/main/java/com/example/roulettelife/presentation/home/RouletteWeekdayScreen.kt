@@ -31,7 +31,17 @@ fun RouletteWeekdayScreen(
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットの選択肢
-    val options by remember { mutableStateOf(roulettePreferences.getWeekdayRouletteItems()) }
+    // ルーレットの選択肢を取得し、10個以上の場合はランダムで10個を選択
+    var allOptions = roulettePreferences.getWeekdayRouletteItems()
+    val options by remember {
+        mutableStateOf(
+            if (allOptions.size > 10) {
+                allOptions.shuffled().take(10)  // ランダムで10個選択
+            } else {
+                allOptions  // 10個未満ならそのまま表示
+            }
+        )
+    }
 
     // ルーレットの回転角度を保持する状態
     var rotation by remember { mutableStateOf(0f) }
