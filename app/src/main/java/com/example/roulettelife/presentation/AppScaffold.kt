@@ -9,8 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.roulettelife.presentation.home.HomeScreen
-import com.example.roulettelife.presentation.rouletteSettings.RouletteSettingsScreen
+import com.example.roulettelife.presentation.home.RouletteWeekdayScreen
+import com.example.roulettelife.presentation.home.RouletteWeekendScreen
+import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
+import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekendSettingsScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,20 +32,40 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,  // navControllerを指定
-        startDestination = Screens.HOME.route,  // 最初のルートを指定
+        startDestination = Screens.ROULETTE_WEEKEND.route,  // 最初のルートを指定
         modifier = modifier  // Modifierを設定
     ) {
-        // Home画面
-        composable(Screens.HOME.route) {
-            HomeScreen(
-                onSettingButtonClick = { navController.navigate(Screens.ROULETTE_SETTINGS.route) }
+        // Home画面1
+        composable(Screens.ROULETTE_WEEKEND.route) {
+            RouletteWeekendScreen(
+                onSettingButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND_SETTINGS.route) },
+                // TODO riko ここはWEEKDAYじゃなくてHome1
+                onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) }
             )
         }
 
-        // ルーレット設定画面
-        composable(Screens.ROULETTE_SETTINGS.route) {
-            RouletteSettingsScreen(
-                onHomeButtonClick = { navController.navigate(Screens.HOME.route) }
+        // Home画面2
+        composable(Screens.ROULETTE_WEEKDAY.route) {
+            RouletteWeekdayScreen(
+                onSettingButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY_SETTINGS.route) },
+                // TODO riko ここはWEEKDAYじゃなくてHome2
+                onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND.route) }
+            )
+        }
+
+        // ルーレット週末設定画面
+        composable(Screens.ROULETTE_WEEKEND_SETTINGS.route) {
+            RouletteWeekendSettingsScreen(
+                onHomeButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) },
+                onChangeWeekendButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY_SETTINGS.route) }
+            )
+        }
+
+        // ルーレット平日設定画面
+        composable(Screens.ROULETTE_WEEKDAY_SETTINGS.route) {
+            RouletteWeekdaySettingsScreen(
+                onHomeButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) },
+                onChangeWeekendButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND_SETTINGS.route) }
             )
         }
     }

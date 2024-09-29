@@ -1,7 +1,6 @@
 package com.example.roulettelife.presentation.home
 
 import android.text.TextPaint
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,14 +23,15 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @Composable
-fun HomeScreen(
-    onSettingButtonClick: () -> Unit
+fun RouletteWeekdayScreen(
+    onSettingButtonClick: () -> Unit,
+    onChangeRouletteButtonClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットの選択肢
-    val options by remember { mutableStateOf(roulettePreferences.getWeekendRouletteItems()) }
+    val options by remember { mutableStateOf(roulettePreferences.getWeekdayRouletteItems()) }
 
     // ルーレットの回転角度を保持する状態
     var rotation by remember { mutableStateOf(0f) }
@@ -61,7 +61,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Let's: $selectedOption", modifier = Modifier.padding(18.dp))
+        Text(text = "平日: $selectedOption", modifier = Modifier.padding(18.dp))
 
         Box(
             contentAlignment = Alignment.Center,
@@ -152,7 +152,7 @@ fun HomeScreen(
 
                         // ポインターが指しているセクションのインデックスを計算
                         val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
-                        
+
                         selectedOption = options[selectedIndex]
                     }
                 }
@@ -164,10 +164,16 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // ルーレットを平日用にするボタン
+        Button(onClick = { onChangeRouletteButtonClick() }) {
+            Text(text = "Change Roulette")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // 設定画面に移動するボタン
         Button(onClick = { onSettingButtonClick() }) {
             Text(text = "Go to Settings")
         }
     }
 }
-
