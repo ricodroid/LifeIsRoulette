@@ -69,9 +69,9 @@ fun HomeScreen(
                 .size(300.dp)
                 .background(Color.LightGray, shape = CircleShape)
         ) {
-            // isSpinning が true かどうかにかかわらず、ルーレットを表示
+            // ルーレットの描画
             Canvas(modifier = Modifier.size(250.dp)) {
-                // ルーレットの回転を描画
+                // 各セクションの角度を計算
                 val sliceAngle = 360f / options.size
                 val radius = size.minDimension / 2
 
@@ -84,7 +84,7 @@ fun HomeScreen(
 
                 rotate(rotation) {
                     for (i in options.indices) {
-                        // セクションの色を描画 開始角度と、終了角度
+                        // セクションの色を描画
                         drawArc(
                             color = colors[i],
                             startAngle = i * sliceAngle,
@@ -92,26 +92,17 @@ fun HomeScreen(
                             useCenter = true
                         )
 
-                        // ログ出力で各オプションの角度を確認
-                        Log.d(
-                            "Roulette",
-                            "${options[i]} is drawn at angle: ${i * sliceAngle} degrees"
-                        )
-
                         // 各セクションの中心角度を計算
                         val textAngle = i * sliceAngle + sliceAngle / 2
-                        val textRadius = radius * 0.6f  // テキストの配置位置
+                        val textRadius = radius * 0.6f
 
-                        // テキストの位置を計算
+                        // テキストの描画位置を計算
                         val x = size.center.x + textRadius * kotlin.math.cos(
                             Math.toRadians(textAngle.toDouble())
                         ).toFloat()
                         val y = size.center.y + textRadius * kotlin.math.sin(
                             Math.toRadians(textAngle.toDouble())
                         ).toFloat()
-
-                        // テキストの最大幅を設定 (セクション内に収めるため)
-                        val maxTextWidth = textRadius * 2  // テキストの最大幅
 
                         // テキストを描画
                         drawContext.canvas.nativeCanvas.drawText(
@@ -124,29 +115,29 @@ fun HomeScreen(
                 }
             }
 
-            // ポインターを描画するための別のCanvas
+            // ポインターを描画
             Canvas(modifier = Modifier
                 .size(320.dp)
-                .offset(y = (-4).dp)  // ポインターをルーレットの上外側に配置
+                .offset(y = (-4).dp)
             ) {
                 val pointerPath = Path().apply {
-                    moveTo(size.width / 2 - 30, 0f)  // 左側の点
-                    lineTo(size.width / 2 + 30, 0f)  // 右側の点
-                    lineTo(size.width / 2, 90f)  // 下側の点（ポインターを大きくする）
-                    close()  // 三角形を閉じる
+                    moveTo(size.width / 2 - 30, 0f)
+                    lineTo(size.width / 2 + 30, 0f)
+                    lineTo(size.width / 2, 90f)
+                    close()
                 }
-                drawPath(pointerPath, Color.Red)  // ポインターの色を赤に設定
+                drawPath(pointerPath, Color.Red)
             }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // ボタンをクリックしてルーレットを回転
         Button(
             onClick = {
                 if (!isSpinning) {
                     isSpinning = true
                     selectedOption = ""
-                    // CoroutineScopeを使用して回転を開始
                     coroutineScope.launch {
                         for (i in 1..20) {
                             rotation += Random.nextFloat() * 360
@@ -154,15 +145,15 @@ fun HomeScreen(
                         }
                         isSpinning = false
 
-                        // 回転が終わった後に正しいインデックスを計算して selectedOption に代入
-                        val finalRotation = (rotation % 360f)  // 最終的な回転角度を取得
-                        val sliceAngle = 360f / options.size   // 各セクションの角度
+                        // 最終的な回転角度を取得
+                        val finalRotation = (rotation % 360f)
+                        val sliceAngle = 360f / options.size
 
-                        // ポインターに対応するインデックスを計算
-                        val adjustedRotation = (360f - finalRotation) % 360f
-                        val selectedIndex = ((adjustedRotation / sliceAngle).toInt() - 1 + options.size) % options.size
+                        // ポインターが指しているセクションのインデックスを計算
+                        val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
 
-                        // 選択されたオプションを更新
+                        // 0度に位置する値をログ出力し、selectedOptionに設定
+                        Log.d("Roulette", "0度に位置する値: ${options[selectedIndex]}")
                         selectedOption = options[selectedIndex]
                     }
                 }
@@ -181,10 +172,3 @@ fun HomeScreen(
     }
 }
 
-//@Preview
-//@Composable
-//fun PreviewRouletteScreen() {
-//    HomeScreen(
-//
-//    )
-//}

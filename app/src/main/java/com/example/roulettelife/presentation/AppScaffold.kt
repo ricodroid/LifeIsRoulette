@@ -42,7 +42,9 @@ fun AppNavHost(
 
         // ルーレット設定画面
         composable(Screens.ROULETTE_SETTINGS.route) {
-            RouletteSettingsScreen()
+            RouletteSettingsScreen(
+                onHomeButtonClick = { navController.navigate(Screens.HOME.route) }
+            )
         }
     }
 }

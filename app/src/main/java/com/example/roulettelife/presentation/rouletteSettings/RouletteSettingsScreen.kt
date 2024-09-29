@@ -11,13 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.roulettelife.data.local.RoulettePreferences
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RouletteSettingsScreen() {
+fun RouletteSettingsScreen(
+    onHomeButtonClick: () -> Unit
+) {
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
     // ルーレットのリスト項目を保持する状態
@@ -93,12 +94,14 @@ fun RouletteSettingsScreen() {
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 設定画面に移動するボタン
+            Button(onClick = { onHomeButtonClick() }) {
+                Text(text = "Go to Settings")
+            }
+
         }
     )
-}
-
-@Preview
-@Composable
-fun PreviewRouletteSettingsScreen() {
-    RouletteSettingsScreen()
 }
