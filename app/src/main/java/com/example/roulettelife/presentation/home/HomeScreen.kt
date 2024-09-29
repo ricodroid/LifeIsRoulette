@@ -118,13 +118,14 @@ fun HomeScreen(
             // ポインターを描画
             Canvas(modifier = Modifier
                 .size(320.dp)
-                .offset(y = (-4).dp)
+                .offset(x = 0.dp, y = 0.dp) // オフセットをリセット
             ) {
                 val pointerPath = Path().apply {
-                    moveTo(size.width / 2 - 30, 0f)
-                    lineTo(size.width / 2 + 30, 0f)
-                    lineTo(size.width / 2, 90f)
-                    close()
+                    // ポインターをルーレットの右中央（3時の方向）に配置
+                    moveTo(size.width, size.height / 2 - 30)  // 右中央の頂点
+                    lineTo(size.width, size.height / 2 + 30)  // 右中央の反対側頂点
+                    lineTo(size.width - 90, size.height / 2)  // ポインターの先端（中央寄り）
+                    close()  // 三角形を閉じる
                 }
                 drawPath(pointerPath, Color.Red)
             }
