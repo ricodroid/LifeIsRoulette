@@ -1,6 +1,7 @@
 package com.example.roulettelife.presentation.home
 
 import android.text.TextPaint
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,7 +17,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.roulettelife.data.local.RoulettePreferences
 import kotlinx.coroutines.delay
@@ -31,7 +31,7 @@ fun HomeScreen(
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットの選択肢
-    val options by remember { mutableStateOf(roulettePreferences.getRouletteItems() ) }
+    val options by remember { mutableStateOf(roulettePreferences.getRouletteItems()) }
 
     // ルーレットの回転角度を保持する状態
     var rotation by remember { mutableStateOf(0f) }
@@ -69,6 +69,7 @@ fun HomeScreen(
                 .size(300.dp)
                 .background(Color.LightGray, shape = CircleShape)
         ) {
+            // isSpinning が true かどうかにかかわらず、ルーレットを表示
             Canvas(modifier = Modifier.size(250.dp)) {
                 // ルーレットの回転を描画
                 val sliceAngle = 360f / options.size
@@ -77,13 +78,13 @@ fun HomeScreen(
                 // 文字を描くためのTextPaintを作成
                 val textPaint = TextPaint().apply {
                     color = android.graphics.Color.BLACK
-                    textSize = 40f
+                    textSize = 30f
                     textAlign = android.graphics.Paint.Align.CENTER
                 }
 
                 rotate(rotation) {
                     for (i in options.indices) {
-                        // セクションの色を描画
+                        // セクションの色を描画 開始角度と、終了角度
                         drawArc(
                             color = colors[i],
                             startAngle = i * sliceAngle,
@@ -91,36 +92,34 @@ fun HomeScreen(
                             useCenter = true
                         )
 
+                        // ログ出力で各オプションの角度を確認
+                        Log.d(
+                            "Roulette",
+                            "${options[i]} is drawn at angle: ${i * sliceAngle} degrees"
+                        )
+
                         // 各セクションの中心角度を計算
                         val textAngle = i * sliceAngle + sliceAngle / 2
                         val textRadius = radius * 0.6f  // テキストの配置位置
 
                         // テキストの位置を計算
-                        val x = size.center.x + textRadius * kotlin.math.cos(Math.toRadians(textAngle.toDouble())).toFloat()
-                        val y = size.center.y + textRadius * kotlin.math.sin(Math.toRadians(textAngle.toDouble())).toFloat()
+                        val x = size.center.x + textRadius * kotlin.math.cos(
+                            Math.toRadians(textAngle.toDouble())
+                        ).toFloat()
+                        val y = size.center.y + textRadius * kotlin.math.sin(
+                            Math.toRadians(textAngle.toDouble())
+                        ).toFloat()
 
                         // テキストの最大幅を設定 (セクション内に収めるため)
                         val maxTextWidth = textRadius * 2  // テキストの最大幅
 
-                        // テキストを折り返しながら描画する
-                        val wrappedText = StringBuilder()
-                        var start = 0
-                        while (start < options[i].length) {
-                            val count = textPaint.breakText(options[i], start, options[i].length, true, maxTextWidth, null)
-                            wrappedText.append(options[i], start, start + count)
-                            wrappedText.append("\n")
-                            start += count
-                        }
-
                         // テキストを描画
                         drawContext.canvas.nativeCanvas.drawText(
-                            wrappedText.toString(),
+                            options[i],
                             x,
                             y,
                             textPaint
                         )
-
-
                     }
                 }
             }
@@ -154,7 +153,16 @@ fun HomeScreen(
                             delay(100)
                         }
                         isSpinning = false
-                        val selectedIndex = (rotation / (360f / options.size)).toInt() % options.size
+
+                        // 回転が終わった後に正しいインデックスを計算して selectedOption に代入
+                        val finalRotation = (rotation % 360f)  // 最終的な回転角度を取得
+                        val sliceAngle = 360f / options.size   // 各セクションの角度
+
+                        // ポインターに対応するインデックスを計算
+                        val adjustedRotation = (360f - finalRotation) % 360f
+                        val selectedIndex = ((adjustedRotation / sliceAngle).toInt() - 1 + options.size) % options.size
+
+                        // 選択されたオプションを更新
                         selectedOption = options[selectedIndex]
                     }
                 }
