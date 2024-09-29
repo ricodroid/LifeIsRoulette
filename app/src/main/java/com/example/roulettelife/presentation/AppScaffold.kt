@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.roulettelife.presentation.action.ActionScreen
 import com.example.roulettelife.presentation.home.RouletteWeekdayScreen
 import com.example.roulettelife.presentation.home.RouletteWeekendScreen
+import com.example.roulettelife.presentation.map.MapScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekendSettingsScreen
 
@@ -74,8 +75,14 @@ fun AppNavHost(
         composable("${Screens.ACTION.route}/{selectedItem}") { backStackEntry ->
             val selectedItem = backStackEntry.arguments?.getString("selectedItem") ?: ""
             ActionScreen(
-                selectedItem = selectedItem
+                selectedItem = selectedItem,
+                onMapButtonClick = { navController.navigate(Screens.MAP.route) }
             )
+        }
+
+        // ルーレット平日設定画面
+        composable(Screens.MAP.route) {
+            MapScreen()
         }
     }
 }
