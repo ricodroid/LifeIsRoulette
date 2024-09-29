@@ -31,7 +31,7 @@ fun HomeScreen(
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットの選択肢
-    val options by remember { mutableStateOf(roulettePreferences.getRouletteItems()) }
+    val options by remember { mutableStateOf(roulettePreferences.getWeekendRouletteItems()) }
 
     // ルーレットの回転角度を保持する状態
     var rotation by remember { mutableStateOf(0f) }
@@ -61,7 +61,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Selected Option: $selectedOption", modifier = Modifier.padding(16.dp))
+        Text(text = "Let's: $selectedOption", modifier = Modifier.padding(18.dp))
 
         Box(
             contentAlignment = Alignment.Center,
@@ -152,9 +152,7 @@ fun HomeScreen(
 
                         // ポインターが指しているセクションのインデックスを計算
                         val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
-
-                        // 0度に位置する値をログ出力し、selectedOptionに設定
-                        Log.d("Roulette", "0度に位置する値: ${options[selectedIndex]}")
+                        
                         selectedOption = options[selectedIndex]
                     }
                 }

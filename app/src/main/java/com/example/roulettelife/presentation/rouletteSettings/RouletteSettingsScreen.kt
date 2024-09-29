@@ -2,9 +2,11 @@ package com.example.roulettelife.presentation.rouletteSettings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,10 +23,9 @@ fun RouletteSettingsScreen(
 ) {
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
+
     // ルーレットのリスト項目を保持する状態
-    // このrouletteItemsは、いつかはAPI化するけど最初のうちは端末内に保存する
-    // SharedPreferences から初期値を取得
-    var rouletteItems by remember { mutableStateOf(roulettePreferences.getRouletteItems()) }
+    var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekendRouletteItems()) }
     var newItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -46,10 +47,35 @@ fun RouletteSettingsScreen(
                 Text(text = "ルーレットに追加された項目", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ルーレットのリストを表示
-                rouletteItems.forEach { item ->
-                    Text(text = item, style = MaterialTheme.typography.bodyMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
+                // スクロール可能なリスト
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    // items(rouletteItems.size)を使ってListのサイズを渡す
+                    items(rouletteItems.size) { index ->
+                        val item = rouletteItems[index]
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // bodyMedium -> bodyLarge などに変更
+                            Text(text = item, style = MaterialTheme.typography.bodyLarge)
+
+                            IconButton(onClick = {
+                                // 項目を削除して、SharedPreferences を更新
+                                roulettePreferences.removeWeekendRouletteItem(item)
+                                rouletteItems = roulettePreferences.getWeekendRouletteItems().toList()
+                            }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Delete Item")
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
 
                 // 項目追加用のダイアログ
@@ -76,8 +102,8 @@ fun RouletteSettingsScreen(
                                 onClick = {
                                     if (newItem.isNotBlank()) {
                                         // 新しいアイテムを追加し、SharedPreferences に保存
-                                        roulettePreferences.addRouletteItem(newItem)
-                                        rouletteItems = roulettePreferences.getRouletteItems()  // リストを更新
+                                        roulettePreferences.saveWeekendRouletteItems(newItem)
+                                        rouletteItems = roulettePreferences.getWeekendRouletteItems().toList()  // リストを更新して、List<String>を確保
                                         newItem = ""  // 入力フィールドをクリア
                                         showDialog = false
                                     }
@@ -93,15 +119,14 @@ fun RouletteSettingsScreen(
                         }
                     )
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // 設定画面に移動するボタン
+                Button(onClick = { onHomeButtonClick() }) {
+                    Text(text = "Go to Roulette")
+                }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // 設定画面に移動するボタン
-            Button(onClick = { onHomeButtonClick() }) {
-                Text(text = "Go to Settings")
-            }
-
         }
     )
 }

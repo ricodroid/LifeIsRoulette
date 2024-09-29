@@ -10,39 +10,69 @@ class RoulettePreferences(context: Context) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     companion object {
-        private const val ROULETTE_PREF_KEY = "roulette_items"
+        private const val ROULETTE_PREF_KEY_WEEKEND = "roulette_items_weekend"
+        private const val ROULETTE_PREF_KEY_WEEKDAY = "roulette_items_weekday"
         private const val PREFERENCES_NAME = "roulette_preferences"
     }
 
-    // ルーレットの項目を取得
-    fun getRouletteItems(): List<String> {
-        val itemsString = sharedPreferences.getString(ROULETTE_PREF_KEY, "") ?: ""
+
+    // 休日のルーレット項目を取得
+    fun getWeekendRouletteItems(): List<String> {
+        val itemsString = sharedPreferences.getString(ROULETTE_PREF_KEY_WEEKEND, "") ?: ""
         return if (itemsString.isNotBlank()) {
-            itemsString.split(",")  // カンマ区切りの文字列をリストに変換
+            itemsString.split(",")
         } else {
             emptyList()
         }
     }
 
-    // ルーレットの項目を保存
-    fun saveRouletteItems(items: List<String>) {
-        val editor = sharedPreferences.edit()
+    // 平日のルーレット項目を取得
+    fun getWeekdayRouletteItems(): List<String> {
+        val itemsString = sharedPreferences.getString(ROULETTE_PREF_KEY_WEEKDAY, "") ?: ""
+        return if (itemsString.isNotBlank()) {
+            itemsString.split(",")
+        } else {
+            emptyList()
+        }
+    }
+
+    // 休日のルーレット項目を追加して保存（Stringを引数に取る）
+    fun saveWeekendRouletteItems(newItem: String) {
+        val items = getWeekendRouletteItems().toMutableList()  // 既存の項目を取得
+        items.add(newItem)  // 新しいアイテムを追加
         val itemsString = items.joinToString(",")  // リストをカンマ区切りの文字列に変換
-        editor.putString(ROULETTE_PREF_KEY, itemsString)
+        val editor = sharedPreferences.edit()
+        editor.putString(ROULETTE_PREF_KEY_WEEKEND, itemsString)
         editor.apply()
     }
 
-    // ルーレットの項目を追加
-    fun addRouletteItem(newItem: String) {
-        val items = getRouletteItems().toMutableList()
-        items.add(newItem)
-        saveRouletteItems(items)
+    // 平日のルーレット項目を追加して保存（Stringを引数に取る）
+    fun saveWeekdayRouletteItems(newItem: String) {
+        val items = getWeekdayRouletteItems().toMutableList()  // 既存の項目を取得
+        items.add(newItem)  // 新しいアイテムを追加
+        val itemsString = items.joinToString(",")  // リストをカンマ区切りの文字列に変換
+        val editor = sharedPreferences.edit()
+        editor.putString(ROULETTE_PREF_KEY_WEEKDAY, itemsString)
+        editor.apply()
     }
 
-    // ルーレットの項目を削除
-    fun removeRouletteItem(itemToRemove: String) {
-        val items = getRouletteItems().toMutableList()
-        items.remove(itemToRemove)
-        saveRouletteItems(items)
+    // 休日のルーレット項目を削除
+    fun removeWeekendRouletteItem(itemToRemove: String) {
+        val items = getWeekendRouletteItems().toMutableList()  // 既存の項目を取得
+        items.remove(itemToRemove)  // 指定したアイテムを削除
+        val itemsString = items.joinToString(",")  // リストをカンマ区切りの文字列に変換
+        val editor = sharedPreferences.edit()
+        editor.putString(ROULETTE_PREF_KEY_WEEKEND, itemsString)
+        editor.apply()
+    }
+
+    // 平日のルーレット項目を削除
+    fun removeWeekdayRouletteItem(itemToRemove: String) {
+        val items = getWeekdayRouletteItems().toMutableList()  // 既存の項目を取得
+        items.remove(itemToRemove)  // 指定したアイテムを削除
+        val itemsString = items.joinToString(",")  // リストをカンマ区切りの文字列に変換
+        val editor = sharedPreferences.edit()
+        editor.putString(ROULETTE_PREF_KEY_WEEKDAY, itemsString)
+        editor.apply()
     }
 }
