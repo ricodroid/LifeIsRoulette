@@ -17,13 +17,16 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.roulettelife.data.local.RoulettePreferences
+import com.example.roulettelife.presentation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @Composable
 fun RouletteWeekdayScreen(
+    navController: NavController,
     onSettingButtonClick: () -> Unit,
     onChangeRouletteButtonClick: () -> Unit,
 ) {
@@ -164,6 +167,10 @@ fun RouletteWeekdayScreen(
                         val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
 
                         selectedOption = options[selectedIndex]
+
+                        // 3秒間停止してからActionScreenへ遷移
+                        delay(3000)
+                        navController.navigate("${Screens.ACTION.route}/$selectedOption")
                     }
                 }
             },

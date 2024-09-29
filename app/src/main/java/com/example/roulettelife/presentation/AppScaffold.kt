@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.roulettelife.presentation.action.ActionScreen
 import com.example.roulettelife.presentation.home.RouletteWeekdayScreen
 import com.example.roulettelife.presentation.home.RouletteWeekendScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
@@ -38,8 +39,8 @@ fun AppNavHost(
         // Home画面1
         composable(Screens.ROULETTE_WEEKEND.route) {
             RouletteWeekendScreen(
+                navController = navController,
                 onSettingButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND_SETTINGS.route) },
-                // TODO riko ここはWEEKDAYじゃなくてHome1
                 onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) }
             )
         }
@@ -47,8 +48,8 @@ fun AppNavHost(
         // Home画面2
         composable(Screens.ROULETTE_WEEKDAY.route) {
             RouletteWeekdayScreen(
+                navController = navController,
                 onSettingButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY_SETTINGS.route) },
-                // TODO riko ここはWEEKDAYじゃなくてHome2
                 onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND.route) }
             )
         }
@@ -66,6 +67,14 @@ fun AppNavHost(
             RouletteWeekdaySettingsScreen(
                 onHomeButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) },
                 onChangeWeekendButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND_SETTINGS.route) }
+            )
+        }
+
+        // アクション画面
+        composable("${Screens.ACTION.route}/{selectedItem}") { backStackEntry ->
+            val selectedItem = backStackEntry.arguments?.getString("selectedItem") ?: ""
+            ActionScreen(
+                selectedItem = selectedItem
             )
         }
     }
