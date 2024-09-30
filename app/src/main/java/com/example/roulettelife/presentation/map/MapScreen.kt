@@ -15,13 +15,12 @@ import com.google.maps.android.compose.rememberMarkerState
 import java.nio.file.WatchEvent
 
 @Composable
-fun MapScreen() {
-    val defaultPosition = LatLng(35.689501, 139.691722) // 東京都庁の位置
-    val defaultZoom = 8f
+fun MapScreen(currentPosition: LatLng) {
+    val defaultZoom = 15f  // ズームレベルを変更
 
     // カメラの初期位置とズームレベルを設定
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(defaultPosition, defaultZoom)
+        position = CameraPosition.fromLatLngZoom(currentPosition, defaultZoom)
     }
 
     // UI 設定 (ズームやスクロールの有効/無効など)
@@ -35,14 +34,13 @@ fun MapScreen() {
     // マップの表示
     GoogleMap(
         cameraPositionState = cameraPositionState,
-        uiSettings = uiSettings,
-
+        uiSettings = uiSettings
     ) {
-        // マーカーの追加 (例: 東京都庁)
+        // 現在地にマーカーを追加
         Marker(
-            state = rememberMarkerState(position = defaultPosition),
-            title = "東京都庁",
-            snippet = "東京都のランドマーク"
+            state = rememberMarkerState(position = currentPosition),
+            title = "現在地",
+            snippet = "ここがあなたの位置です"
         )
     }
 }

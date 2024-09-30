@@ -29,8 +29,11 @@ android {
             }
         }
 
-        // 環境変数を BuildConfig に設定する
+
+        // 環境変数を BuildConfig に設定
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${localProperties["GOOGLE_MAPS_API_KEY"]}\"")
+
+        resValue("string", "google_maps_key", "${localProperties["GOOGLE_MAPS_API_KEY"]}")
     }
 
     buildTypes {
@@ -82,5 +85,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation ("com.google.android.gms:play-services-maps:19.0.0")
+    implementation ("com.google.maps.android:maps-compose:4.3.0")
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
     implementation ("com.google.maps.android:maps-compose:4.3.0")
 }

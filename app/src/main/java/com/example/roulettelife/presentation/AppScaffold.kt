@@ -15,9 +15,8 @@ import com.example.roulettelife.presentation.home.RouletteWeekendScreen
 import com.example.roulettelife.presentation.map.MapScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekendSettingsScreen
+import com.google.android.gms.maps.model.LatLng
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScaffold() {
     val navController = rememberNavController()
@@ -80,9 +79,16 @@ fun AppNavHost(
             )
         }
 
-        // ルーレット平日設定画面
-        composable(Screens.MAP.route) {
-            MapScreen()
+        // Map画面
+        composable(Screens.MAP.route) { backStackEntry ->
+            val latitude = backStackEntry.arguments?.getString("latitude")?.toDoubleOrNull() ?: 35.6895 // デフォルトは東京
+            val longitude = backStackEntry.arguments?.getString("longitude")?.toDoubleOrNull() ?: 139.6917
+
+            // 位置情報をLatLng型に変換
+            val location = LatLng(latitude, longitude)
+
+            // MapScreenに位置情報を渡す
+            MapScreen(currentPosition = location)
         }
     }
 }
