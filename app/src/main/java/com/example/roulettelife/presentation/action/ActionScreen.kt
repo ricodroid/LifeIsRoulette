@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +35,19 @@ fun ActionScreen(
 ) {
     val currentDate = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault()).format(Date())
     val context = LocalContext.current  // LocalContextからコンテキストを取得
+    val diaryPreferences = DiaryPreferences(context)
+
+    // LaunchedEffectで画面表示時の処理を実行
+    LaunchedEffect(selectedItem) {
+        // selectedItemが空でない場合はそのまま保存、空の場合はSharedPreferencesから取得
+        val itemToSave = selectedItem.ifBlank {
+            diaryPreferences.getSelectedItem() ?: ""
+        }
+
+        if (itemToSave.isNotBlank()) {
+            diaryPreferences.saveSelectedItem(itemToSave)
+        }
+    }
 
     val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
         // ローカル関数として写真を保存する処理
@@ -62,6 +77,9 @@ fun ActionScreen(
             val uri = savePhotoToExternalStorage(context, bitmap)
             val diaryEntry = "今日は $selectedItem を完了しました。" // 日記内容のサンプル
             onPhotoSaved(uri, diaryEntry)
+
+            // SharedPreferencesから選択された項目を削除
+            diaryPreferences.removeSelectedItem()
 
             // DiaryScreen に遷移
             navController.navigate(Screens.DIARY.createRoute(uri.toString(), diaryEntry))

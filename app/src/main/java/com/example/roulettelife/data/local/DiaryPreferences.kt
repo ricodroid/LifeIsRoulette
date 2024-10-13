@@ -11,6 +11,26 @@ class DiaryPreferences(context: Context) {
 
     companion object {
         private const val PREFERENCES_NAME = "diary_preferences"
+        private const val KEY_SELECTED_ITEM = "selected_item"
+    }
+
+    // 選択された項目を取得
+    fun getSelectedItem(): String? {
+        return sharedPreferences.getString(KEY_SELECTED_ITEM, null)
+    }
+
+    // 選択された項目を保存
+    fun saveSelectedItem(item: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_SELECTED_ITEM, item)
+        editor.apply()
+    }
+
+    // 選択された項目を削除
+    fun removeSelectedItem() {
+        val editor = sharedPreferences.edit()
+        editor.remove(KEY_SELECTED_ITEM)  // 選択された項目を削除
+        editor.apply()
     }
 
     // 日記を取得（写真のURIに紐づく）

@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -12,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.action.ActionScreen
 import com.example.roulettelife.presentation.diary.DiaryScreen
 import com.example.roulettelife.presentation.diaryList.DiaryDetailScreen
@@ -25,8 +27,22 @@ import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekendSet
 fun AppScaffold(context: Context) {
     val navController = rememberNavController()
 
+    val diaryPreferences = DiaryPreferences(context)
+    val selectedItem = diaryPreferences.getSelectedItem()
+
+    // selectedItemがある場合はActionScreenへ遷移
+    LaunchedEffect(Unit) {
+        if (!selectedItem.isNullOrBlank()) {
+            navController.navigate("${Screens.ACTION.route}/$selectedItem")
+        }
+    }
+
     Scaffold { padding ->
-        AppNavHost(navController = navController, modifier = Modifier.padding(padding), context = context)
+        AppNavHost(
+            navController = navController,
+            modifier = Modifier.padding(padding),
+            context = context
+        )
     }
 }
 
