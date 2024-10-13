@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        requestSystemPermissions()
+//        requestSystemPermissions()
 
         // アプリの開始時に全てのパーミッションをリクエスト
         if (!PermissionsHelper.allPermissionsGranted(this)) {

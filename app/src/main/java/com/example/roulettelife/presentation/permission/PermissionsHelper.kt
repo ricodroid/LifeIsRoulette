@@ -79,14 +79,14 @@ object PermissionsHelper {
         val permissions = mutableListOf<String>()
 
         // Android 12以上の場合、Bluetooth関連のパーミッション
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            permissions.add(Manifest.permission.BLUETOOTH_SCAN)
-            permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
-            permissions.add(Manifest.permission.BLUETOOTH_ADVERTISE)
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            permissions.add(Manifest.permission.BLUETOOTH_SCAN)
+//            permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+//            permissions.add(Manifest.permission.BLUETOOTH_ADVERTISE)
+//        }
 
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+//        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+//        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
 
         // Android 13以上の場合、通知関連のパーミッション
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -94,9 +94,9 @@ object PermissionsHelper {
         }
 
         // Android 14以上の場合、FOREGROUND_SERVICE_CONNECTED_DEVICEパーミッション
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            permissions.add(Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE)
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+//            permissions.add(Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE)
+//        }
 
         // カメラパーミッションを追加
         permissions.add(Manifest.permission.CAMERA)
