@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,14 +89,34 @@ fun RouletteWeekendScreen(
 
     // ランダムな色のリストを作成
     val colors = remember {
-        List(options.size) {
-            Color(
-                red = Random.nextFloat(),
-                green = Random.nextFloat(),
-                blue = Random.nextFloat()
-            )
-        }
+        listOf(
+            Color(0xFF00BCD4),  // サイアングリーン
+            Color(0xFF9C27B0),  // パープル
+            Color(0xFFFF5722),  // ビビッドオレンジ
+            Color(0xFF3F51B5),  // インディゴブルー
+            Color(0xFFFFEB3B),  // イエロー
+            Color(0xFF4CAF50),  // グリーン
+            Color(0xFF2196F3),  // ブルー
+            Color(0xFFFFC107),  // アンバー
+            Color(0xFF673AB7),  // ディープパープル
+            Color(0xFFFFAB91),  // コーラル
+            Color(0xFFC5CAE9),  // ライトインディゴ
+            Color(0xFFFFF59D),  // ライトイエロー
+            Color(0xFFB3E5FC),  // ライトブルー
+            Color(0xFFFFE082),  // ライトゴールド
+            Color(0xFFCE93D8),  // ライトパープル
+            Color(0xFFFF9800),  // ディープオレンジ
+            Color(0xFFCDDC39),  // ライム
+            Color(0xFF009688),  // ティール
+            Color(0xFF795548),  // ブラウン
+            Color(0xFFE91E63),  // ピンク
+            Color(0xFF607D8B),  // ブルーグレー
+            Color(0xFF8BC34A),  // ライトグリーン
+            Color(0xFF673AB7),  // バイオレット
+            Color(0xFFD32F2F)   // ダークレッド
+        )
     }
+
 
     // メニューの状態を保持
     var expanded by remember { mutableStateOf(false) }
@@ -110,7 +131,7 @@ fun RouletteWeekendScreen(
                     Text(
                         text = "Weekend Roulette",
                         fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
-                        color = Color(0xFFFFA500)
+                        color = Color(0xFF6699CC)
                     )
                 },
                 actions = {
@@ -158,7 +179,10 @@ fun RouletteWeekendScreen(
                             }
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.mediumTopAppBarColors(
+                    containerColor = Color(0xFFFFAB91)
+                )
             )
         },
         content = { padding ->
