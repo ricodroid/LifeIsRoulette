@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,12 +36,11 @@ fun ActionScreen(
     onPhotoSaved: (Uri, String) -> Unit
 ) {
     val currentDate = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault()).format(Date())
-    val context = LocalContext.current  // LocalContextからコンテキストを取得
+    val context = LocalContext.current
     val diaryPreferences = DiaryPreferences(context)
 
     // LaunchedEffectで画面表示時の処理を実行
     LaunchedEffect(selectedItem) {
-        // selectedItemが空でない場合はそのまま保存、空の場合はSharedPreferencesから取得
         val itemToSave = selectedItem.ifBlank {
             diaryPreferences.getSelectedItem() ?: ""
         }
@@ -50,7 +51,6 @@ fun ActionScreen(
     }
 
     val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        // ローカル関数として写真を保存する処理
         fun savePhotoToExternalStorage(context: Context, bitmap: Bitmap): Uri {
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")
@@ -71,8 +71,6 @@ fun ActionScreen(
             return uri ?: Uri.EMPTY
         }
 
-
-        // 写真の保存処理を実行
         bitmap?.let {
             val uri = savePhotoToExternalStorage(context, bitmap)
             val diaryEntry = "今日は $selectedItem を完了しました。" // 日記内容のサンプル
@@ -90,46 +88,51 @@ fun ActionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFF001F3F))  // ネイビーの背景色
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 可愛い日付表示
+        // 日付表示（上品なフォントと色）
         Text(
             text = "今日は $currentDate です",
-            fontSize = 24.sp,
+            fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFEE82EE),
-            modifier = Modifier.padding(bottom = 16.dp)
+            color = Color(0xFFB0E0E6),  // ライトブルー系の色
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // メッセージ表示
+        // メッセージ表示（モダンな感じに）
         Text(
             text = "さぁ！退屈な一日を、思い出深い一日に変えよう！",
-            fontSize = 18.sp,
-            color = Color(0xFF8A2BE2),
-            modifier = Modifier.padding(bottom = 16.dp)
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFFFFD700),  // 黄色の色
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
         // 選択された項目の表示
         Text(
-            text = "選択された項目: $selectedItem",
-            fontSize = 20.sp,
-            modifier = Modifier.padding(bottom = 16.dp)
+            text = "今日の思い出: $selectedItem",
+            fontSize = 22.sp,
+            fontStyle = FontStyle.Italic,  // イタリックでおしゃれに
+            color = Color(0xFFADD8E6),  // ライトブルー
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
         // Doneボタン
         Button(
             onClick = { photoLauncher.launch(null) },  // カメラを起動する
             shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(Color(0xFFFFD700)),  // 黄色に変更
             modifier = Modifier
-                .size(100.dp)
-                .background(Color(0xFF00BFFF))
+                .size(180.dp)  // ボタンをさらに大きく
         ) {
             Text(
                 text = "Done",
-                fontSize = 16.sp,
-                color = Color.White
+                fontSize = 22.sp,  // フォントサイズを大きくして
+                fontWeight = FontWeight.Bold,
+                color = Color.Black  // 黒文字でよりコントラストを強く
             )
         }
 

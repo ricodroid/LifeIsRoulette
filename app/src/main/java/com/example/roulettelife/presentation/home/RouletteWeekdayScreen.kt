@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -84,18 +86,43 @@ fun RouletteWeekdayScreen(
         }
     }
 
+    // メニューの状態を保持
+    var expanded by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "平日ルーレット") },
                 actions = {
                     // ハンバーガーメニューアイコンを追加
-                    IconButton(onClick = {
-                        // 日記一覧画面に遷移
-                        navController.navigate(Screens.DIARY_LIST.route)
-                    }) {
+                    IconButton(onClick = { expanded = true }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
+
+                    // ドロップダウンメニューを追加
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        // 設定に移動
+                        DropdownMenuItem(
+                            text = { Text("設定に移動") },  // 設定画面に移動するオプション
+                            onClick = {
+                                expanded = false
+                                onSettingButtonClick()  // 設定画面に移動
+                            }
+                        )
+
+                        // 一覧画面に移動
+                        DropdownMenuItem(
+                            text = { Text("一覧画面に移動") },  // 一覧画面に移動するオプション
+                            onClick = {
+                                expanded = false
+                                navController.navigate(Screens.DIARY_LIST.route)  // 一覧画面に移動
+                            }
+                        )
+                    }
+
                 }
             )
         },
@@ -109,7 +136,7 @@ fun RouletteWeekdayScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "平日: $selectedOption", modifier = Modifier.padding(18.dp))
+                Text(text = selectedOption, modifier = Modifier.padding(18.dp))
 
                 Box(
                     contentAlignment = Alignment.Center,
@@ -217,10 +244,6 @@ fun RouletteWeekdayScreen(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                Button(onClick = { onSettingButtonClick() }) {
-                    Text(text = "Go to Settings")
-                }
             }
         }
     )
