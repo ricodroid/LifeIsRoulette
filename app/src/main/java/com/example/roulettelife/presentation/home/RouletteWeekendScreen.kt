@@ -118,6 +118,13 @@ fun RouletteWeekendScreen(
                             useCenter = true
                         )
 
+                        // 表示するテキストを制限（長すぎる場合はカットして"..."を追加）
+                        val displayText = if (options[i].length > 10) {
+                            options[i].take(5) + "..."
+                        } else {
+                            options[i]
+                        }
+
                         // 各セクションの中心角度を計算
                         val textAngle = i * sliceAngle + sliceAngle / 2
                         val textRadius = radius * 0.6f
@@ -132,7 +139,7 @@ fun RouletteWeekendScreen(
 
                         // テキストを描画
                         drawContext.canvas.nativeCanvas.drawText(
-                            options[i],
+                            displayText,
                             x,
                             y,
                             textPaint
