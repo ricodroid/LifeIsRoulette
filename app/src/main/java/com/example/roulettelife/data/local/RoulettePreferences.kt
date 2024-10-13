@@ -3,6 +3,7 @@ package com.example.roulettelife.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.util.Locale
 
 // SharedPreferencesでルーレットの目を管理
 class RoulettePreferences(context: Context) {
@@ -15,6 +16,7 @@ class RoulettePreferences(context: Context) {
         private const val ROULETTE_PREF_KEY_WEEKDAY = "roulette_items_weekday"
         private const val DELETED_DEFAULT_ITEMS_KEY = "deleted_default_items"
         private const val PREFERENCES_NAME = "roulette_preferences"
+        private const val LANGUAGE_PREF_KEY = "app_language"
     }
 
 
@@ -101,5 +103,15 @@ class RoulettePreferences(context: Context) {
     private fun saveItems(key: String, items: List<String>) {
         val itemsString = items.joinToString(",")
         sharedPreferences.edit().putString(key, itemsString).apply()
+    }
+
+    // 言語を保存する
+    fun saveLanguage(language: String) {
+        sharedPreferences.edit().putString(LANGUAGE_PREF_KEY, language).apply()
+    }
+
+    // 言語を取得する
+    fun getLanguage(): String {
+        return sharedPreferences.getString(LANGUAGE_PREF_KEY, Locale.getDefault().language) ?: Locale.getDefault().language
     }
 }

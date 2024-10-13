@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RouletteLife</string>
+
+    <!--  Permission  -->
+    <string name="gps_dialog_title">This app requires GPS to be enabled.</string>
+    <string name="gps_dialog_message">To enable GPS, you will be redirected to the settings screen.</string>
+    <string name="gps_dialog_positive_button">OK.</string>
+    <string name="gps_dialog_negative_button">Cancel.</string>
+    <string name="request_background_dialog">Background Location Permission</string>
+    <string name="request_background_dialog_message">This app needs background location access. Please enable 「Allow all the time」 in the settings.</string>
+
+
+    <!--  DiaryScreen  -->
+    <string name="enter_diary">日記を入力してください</string>
+    <string name="delete_item">この項目を削除しますか？</string>
+    <string name="delete">削除</string>
+    <string name="keep">残す</string>
+
+    <!--  ActionScreen  -->
+    <string name="completed_item">%1$s を完了しました！</string>
+    <string name="today_item">今日は %1$s です</string>
+    <string name="lets_turn">退屈な一日を思い出深い日に変えましょう！</string>
+    <string name="highlight">今日のハイライト</string>
+
+    <!--  DiaryDetailScreen  -->
+    <string name="diary_photo">日記の写真</string>
+    <string name="please_enter_diary">日記を入力してください</string>
+    <string name="save">保存</string>
+
+    <!--  DiaryListScreen  -->
+    <string name="diary">日記</string>
+    <string name="not_available">日付がありません</string>
+</resources>

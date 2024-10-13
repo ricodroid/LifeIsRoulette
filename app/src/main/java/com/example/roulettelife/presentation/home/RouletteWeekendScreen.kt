@@ -1,5 +1,7 @@
 package com.example.roulettelife.presentation.home
 
+import android.app.Activity
+import android.content.Context
 import android.text.TextPaint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -32,10 +34,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
+import com.example.roulettelife.data.local.LocaleUtils.setLocale
 import com.example.roulettelife.data.local.RoulettePreferences
 import com.example.roulettelife.presentation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +54,8 @@ fun RouletteWeekendScreen(
 
     // XML から defaultItems を取得
     val defaultItems = remember { context.resources.getStringArray(R.array.default_weekend_roulette_items).toMutableList() }
+    // 現在の言語を取得
+    var currentLanguage by remember { mutableStateOf(roulettePreferences.getLanguage()) }
 
     // SharedPreferences から削除されたデフォルトアイテムとユーザーが追加した項目を取得
     val deletedDefaultItems = remember { roulettePreferences.getDeletedDefaultItems() }
@@ -102,7 +108,7 @@ fun RouletteWeekendScreen(
                 title = {
                     Text(
                         text = "Weekend Roulette",
-                        fontFamily = poppinsFontFamily,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
                         color = Color(0xFFFFA500)
                     )
                 },
@@ -122,10 +128,32 @@ fun RouletteWeekendScreen(
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("List") },
+                            text = { Text("Diary") },
                             onClick = {
                                 expanded = false
                                 navController.navigate(Screens.DIARY_LIST.route)
+                            }
+                        )
+
+                        // 言語変更オプション
+                        DropdownMenuItem(
+                            text = { Text("English") },
+                            onClick = {
+                                setLocale(context, "en")
+                                roulettePreferences.saveLanguage("en")
+                                currentLanguage = "en"
+                                (context as? Activity)?.recreate()  // アクティビティを再起動
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("日本語") },
+                            onClick = {
+                                setLocale(context, "ja")
+                                roulettePreferences.saveLanguage("ja")
+                                currentLanguage = "ja"
+                                (context as? Activity)?.recreate()  // アクティビティを再起動
+                                expanded = false
                             }
                         )
                     }

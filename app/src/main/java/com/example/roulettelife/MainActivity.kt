@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.roulettelife.data.local.LocaleUtils
+import com.example.roulettelife.data.local.RoulettePreferences
 import com.example.roulettelife.presentation.AppScaffold
 import com.example.roulettelife.presentation.permission.PermissionsHelper
 import com.example.roulettelife.presentation.permission.PermissionsHelper.isBluetoothEnabled
@@ -25,6 +27,11 @@ class MainActivity : ComponentActivity() {
 
         // アプリ起動時に権限の許可状態をログに表示
         PermissionsHelper.logPermissionStatus(this)
+
+        // 言語設定を適用
+        val roulettePreferences = RoulettePreferences(this)
+        val language = roulettePreferences.getLanguage() ?: "en"  // デフォルトは英語
+        LocaleUtils.setLocale(this, language)
 
         // パーミッションリクエストの初期化
         permissionLauncher = registerForActivityResult(
