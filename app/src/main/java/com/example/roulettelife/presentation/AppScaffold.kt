@@ -2,7 +2,6 @@ package com.example.roulettelife.presentation
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -15,6 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.roulettelife.presentation.action.ActionScreen
 import com.example.roulettelife.presentation.diary.DiaryScreen
+import com.example.roulettelife.presentation.diaryList.DiaryDetailScreen
+import com.example.roulettelife.presentation.diaryList.DiaryListScreen
 import com.example.roulettelife.presentation.home.RouletteWeekdayScreen
 import com.example.roulettelife.presentation.home.RouletteWeekendScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
@@ -87,7 +88,7 @@ fun AppNavHost(
             )
         }
 
-        // 日記画面 (写真のURIと日記の内容を受け取る)
+        // 日記詳細画面
         composable(
             route = Screens.DIARY.route,
             arguments = listOf(
@@ -105,6 +106,29 @@ fun AppNavHost(
                 onRouletteButtonClick = {
                     navController.navigate(Screens.ROULETTE_WEEKDAY.route)
                 }
+            )
+        }
+
+        // 日記一覧画面
+        composable(Screens.DIARY_LIST.route) {
+            DiaryListScreen(
+                navController = navController,
+                context = context
+            )
+        }
+
+        // 日記の詳細画面 (写真のURIに基づいて日記を表示)
+        composable(
+            route = "${Screens.DIARY_DETAIL.route}/{photoUri}",
+            arguments = listOf(
+                navArgument("photoUri") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val photoUri = Uri.decode(backStackEntry.arguments?.getString("photoUri") ?: "")
+            DiaryDetailScreen(
+                navController = navController,
+                photoUri = photoUri,
+                context = context
             )
         }
     }

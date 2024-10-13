@@ -1,11 +1,18 @@
 package com.example.roulettelife.presentation.home
 
 import android.text.TextPaint
+import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouletteWeekdayScreen(
     navController: NavController,
@@ -65,132 +73,138 @@ fun RouletteWeekdayScreen(
         }
     }
 
-    // UI構成
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "平日: $selectedOption", modifier = Modifier.padding(18.dp))
-
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(300.dp)
-                .background(Color.LightGray, shape = CircleShape)
-        ) {
-            // ルーレットの描画
-            Canvas(modifier = Modifier.size(250.dp)) {
-                // 各セクションの角度を計算
-                val sliceAngle = 360f / options.size
-                val radius = size.minDimension / 2
-
-                // 文字を描くためのTextPaintを作成
-                val textPaint = TextPaint().apply {
-                    color = android.graphics.Color.BLACK
-                    textSize = 30f
-                    textAlign = android.graphics.Paint.Align.CENTER
-                }
-
-                rotate(rotation) {
-                    for (i in options.indices) {
-                        // セクションの色を描画
-                        drawArc(
-                            color = colors[i],
-                            startAngle = i * sliceAngle,
-                            sweepAngle = sliceAngle,
-                            useCenter = true
-                        )
-
-                        // 各セクションの中心角度を計算
-                        val textAngle = i * sliceAngle + sliceAngle / 2
-                        val textRadius = radius * 0.6f
-
-                        // テキストの描画位置を計算
-                        val x = size.center.x + textRadius * kotlin.math.cos(
-                            Math.toRadians(textAngle.toDouble())
-                        ).toFloat()
-                        val y = size.center.y + textRadius * kotlin.math.sin(
-                            Math.toRadians(textAngle.toDouble())
-                        ).toFloat()
-
-                        // テキストを描画
-                        drawContext.canvas.nativeCanvas.drawText(
-                            options[i],
-                            x,
-                            y,
-                            textPaint
-                        )
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "平日ルーレット") },
+                actions = {
+                    // ハンバーガーメニューアイコンを追加
+                    IconButton(onClick = {
+                        // 日記一覧画面に遷移
+                        navController.navigate(Screens.DIARY_LIST.route)
+                    }) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
-            }
-
-            // ポインターを描画
-            Canvas(modifier = Modifier
-                .size(320.dp)
-                .offset(x = 0.dp, y = 0.dp) // オフセットをリセット
+            )
+        },
+        content = { padding ->
+            // UI構成
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(padding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val pointerPath = Path().apply {
-                    // ポインターをルーレットの右中央（3時の方向）に配置
-                    moveTo(size.width, size.height / 2 - 30)  // 右中央の頂点
-                    lineTo(size.width, size.height / 2 + 30)  // 右中央の反対側頂点
-                    lineTo(size.width - 90, size.height / 2)  // ポインターの先端（中央寄り）
-                    close()  // 三角形を閉じる
-                }
-                drawPath(pointerPath, Color.Red)
-            }
-        }
+                Text(text = "平日: $selectedOption", modifier = Modifier.padding(18.dp))
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // ボタンをクリックしてルーレットを回転
-        Button(
-            onClick = {
-                if (!isSpinning) {
-                    isSpinning = true
-                    selectedOption = ""
-                    coroutineScope.launch {
-                        for (i in 1..20) {
-                            rotation += Random.nextFloat() * 360
-                            delay(100)
-                        }
-                        isSpinning = false
-
-                        // 最終的な回転角度を取得
-                        val finalRotation = (rotation % 360f)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(300.dp)
+                        .background(Color.LightGray, shape = CircleShape)
+                ) {
+                    // ルーレットの描画
+                    Canvas(modifier = Modifier.size(250.dp)) {
                         val sliceAngle = 360f / options.size
+                        val radius = size.minDimension / 2
 
-                        // ポインターが指しているセクションのインデックスを計算
-                        val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
+                        val textPaint = TextPaint().apply {
+                            color = android.graphics.Color.BLACK
+                            textSize = 30f
+                            textAlign = android.graphics.Paint.Align.CENTER
+                        }
 
-                        selectedOption = options[selectedIndex]
+                        rotate(rotation) {
+                            for (i in options.indices) {
+                                drawArc(
+                                    color = colors[i],
+                                    startAngle = i * sliceAngle,
+                                    sweepAngle = sliceAngle,
+                                    useCenter = true
+                                )
 
-                        // 3秒間停止してからActionScreenへ遷移
-                        delay(3000)
-                        navController.navigate("${Screens.ACTION.route}/$selectedOption")
+                                val textAngle = i * sliceAngle + sliceAngle / 2
+                                val textRadius = radius * 0.6f
+
+                                val x = size.center.x + textRadius * kotlin.math.cos(
+                                    Math.toRadians(textAngle.toDouble())
+                                ).toFloat()
+                                val y = size.center.y + textRadius * kotlin.math.sin(
+                                    Math.toRadians(textAngle.toDouble())
+                                ).toFloat()
+
+                                drawContext.canvas.nativeCanvas.drawText(
+                                    options[i],
+                                    x,
+                                    y,
+                                    textPaint
+                                )
+                            }
+                        }
+                    }
+
+                    // ポインターを描画
+                    Canvas(modifier = Modifier
+                        .size(320.dp)
+                        .offset(x = 0.dp, y = 0.dp)
+                    ) {
+                        val pointerPath = Path().apply {
+                            moveTo(size.width, size.height / 2 - 30)
+                            lineTo(size.width, size.height / 2 + 30)
+                            lineTo(size.width - 90, size.height / 2)
+                            close()
+                        }
+                        drawPath(pointerPath, Color.Red)
                     }
                 }
-            },
-            enabled = !isSpinning
-        ) {
-            Text(text = if (isSpinning) "Spinning..." else "Spin the Roulette")
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // ルーレットを回転させるボタン
+                Button(
+                    onClick = {
+                        if (!isSpinning) {
+                            isSpinning = true
+                            selectedOption = ""
+                            coroutineScope.launch {
+                                for (i in 1..20) {
+                                    rotation += Random.nextFloat() * 360
+                                    delay(100)
+                                }
+                                isSpinning = false
+
+                                val finalRotation = (rotation % 360f)
+                                val sliceAngle = 360f / options.size
+                                val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
+
+                                selectedOption = options[selectedIndex]
+
+                                delay(3000)
+                                navController.navigate("${Screens.ACTION.route}/$selectedOption")
+                            }
+                        }
+                    },
+                    enabled = !isSpinning
+                ) {
+                    Text(text = if (isSpinning) "Spinning..." else "Spin the Roulette")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = { onChangeRouletteButtonClick() }) {
+                    Text(text = "Change Roulette")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = { onSettingButtonClick() }) {
+                    Text(text = "Go to Settings")
+                }
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // ルーレットを平日用にするボタン
-        Button(onClick = { onChangeRouletteButtonClick() }) {
-            Text(text = "Change Roulette")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 設定画面に移動するボタン
-        Button(onClick = { onSettingButtonClick() }) {
-            Text(text = "Go to Settings")
-        }
-    }
+    )
 }
