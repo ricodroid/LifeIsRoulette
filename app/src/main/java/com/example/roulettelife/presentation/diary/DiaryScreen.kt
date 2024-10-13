@@ -1,5 +1,6 @@
 package com.example.roulettelife.presentation.diary
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,14 +22,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.roulettelife.data.local.DiaryPreferences
 
 @Composable
 fun DiaryScreen(
-    navController: NavController,
     photoUri: String,  // 渡された写真のURI
-    diaryEntry: String  // 渡された日記内容
+    diaryEntry: String,  // 渡された日記内容
+    context: Context,
+    onRouletteButtonClick: () -> Unit,
 ) {
-    val uri = Uri.parse(photoUri)  // URIをパース
+    val uri = Uri.parse(photoUri)
+    val diaryPreferences = DiaryPreferences(context)
 
     Column(
         modifier = Modifier
@@ -68,8 +72,11 @@ fun DiaryScreen(
         )
 
         Button(onClick = {
-            // 日記を保存する処理や次の画面に進む処理を追加
-            navController.popBackStack()  // 戻る
+            // DiaryPreferencesを使用して日記をSharedPreferencesに保存
+            diaryPreferences.saveDiary(photoUri, diaryText)
+
+            // ルーレット画面に遷移する
+            onRouletteButtonClick()
         }) {
             Text(text = "日記を保存")
         }

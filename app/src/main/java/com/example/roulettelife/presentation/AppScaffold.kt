@@ -1,5 +1,6 @@
 package com.example.roulettelife.presentation
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.padding
@@ -20,18 +21,19 @@ import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySet
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekendSettingsScreen
 
 @Composable
-fun AppScaffold() {
+fun AppScaffold(context: Context) {
     val navController = rememberNavController()
 
     Scaffold { padding ->
-        AppNavHost(navController = navController, modifier = Modifier.padding(padding))
+        AppNavHost(navController = navController, modifier = Modifier.padding(padding), context = context)
     }
 }
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,  // NavHostControllerを使用
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    context: Context
 ) {
     NavHost(
         navController = navController,  // navControllerを指定
@@ -97,9 +99,12 @@ fun AppNavHost(
             val diaryEntry = Uri.decode(backStackEntry.arguments?.getString("diaryEntry") ?: "")
 
             DiaryScreen(
-                navController = navController,
                 photoUri = photoUri,
-                diaryEntry = diaryEntry
+                diaryEntry = diaryEntry,
+                context = context,
+                onRouletteButtonClick = {
+                    navController.navigate(Screens.ROULETTE_WEEKDAY.route)
+                }
             )
         }
     }
