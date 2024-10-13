@@ -165,7 +165,7 @@ fun RouletteWeekendScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(Color(0xFFF5F5DC))
                     .padding(padding)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
@@ -270,7 +270,7 @@ fun RouletteWeekendScreen(
                         }
                     },
                     enabled = !isSpinning,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE57373)),
                     modifier = Modifier
                         .width(210.dp)
                         .height(100.dp)
