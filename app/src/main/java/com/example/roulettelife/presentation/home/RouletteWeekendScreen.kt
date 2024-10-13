@@ -241,14 +241,14 @@ fun RouletteWeekendScreen(
                     },
                     enabled = !isSpinning
                 ) {
-                    Text(text = if (isSpinning) "Spinning..." else "Spin the Roulette")
+                    Text(text = if (isSpinning) "Spinning..." else "Spin")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ルーレットを平日用にするボタン
                 Button(onClick = { onChangeRouletteButtonClick() }) {
-                    Text(text = "Change Roulette")
+                    Text(text = "Change Weekday")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

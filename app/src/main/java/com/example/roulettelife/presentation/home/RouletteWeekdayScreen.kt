@@ -243,13 +243,13 @@ fun RouletteWeekdayScreen(
                     },
                     enabled = !isSpinning
                 ) {
-                    Text(text = if (isSpinning) "Spinning..." else "Spin the Roulette")
+                    Text(text = if (isSpinning) "Spinning..." else "Spin")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(onClick = { onChangeRouletteButtonClick() }) {
-                    Text(text = "Change Roulette")
+                    Text(text = "Change Weekend")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
