@@ -1,4 +1,12 @@
 package com.example.roulettelife.presentation.action
+import android.content.ContentValues
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -8,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -17,9 +26,41 @@ import java.util.*
 @Composable
 fun ActionScreen(
     selectedItem: String,
-    onMapButtonClick: () -> Unit
+    onPhotoSaved: (Uri, String) -> Unit
 ) {
     val currentDate = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault()).format(Date())
+    val context = LocalContext.current  // LocalContextからコンテキストを取得
+
+    val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        // ローカル関数として写真を保存する処理
+        fun savePhotoToExternalStorage(context: Context, bitmap: Bitmap): Uri {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+            }
+
+            val resolver = context.contentResolver
+            val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+            uri?.let {
+                resolver.openOutputStream(it)?.let { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    outputStream.close()
+                }
+            }
+
+            return uri ?: Uri.EMPTY
+        }
+
+
+        // 写真の保存処理を実行
+        bitmap?.let {
+            val uri = savePhotoToExternalStorage(context, bitmap)
+            val diaryEntry = "今日は $selectedItem を完了しました。" // 日記内容のサンプル
+            onPhotoSaved(uri, diaryEntry)
+        }
+    }
 
     // UI構成
     Column(
@@ -34,15 +75,15 @@ fun ActionScreen(
             text = "今日は $currentDate です",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFEE82EE),  // 可愛いピンク系の色
+            color = Color(0xFFEE82EE),
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // さぁ！退屈な一日を、思い出深い一日に変えよう！というメッセージ
+        // メッセージ表示
         Text(
             text = "さぁ！退屈な一日を、思い出深い一日に変えよう！",
             fontSize = 18.sp,
-            color = Color(0xFF8A2BE2),  // バイオレット系の可愛い色
+            color = Color(0xFF8A2BE2),
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -53,20 +94,13 @@ fun ActionScreen(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // 「$selectedItem を完了したら、その場所でDoneボタンをタップしよう」
-        Text(
-            text = "$selectedItem を完了したら、その場所でDoneボタンをタップしよう",
-            fontSize = 16.sp,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        // Doneボタンを球体で表示する
+        // Doneボタン
         Button(
-            onClick = onMapButtonClick,
-            shape = CircleShape,  // 球体にする
+            onClick = { photoLauncher.launch(null) },  // カメラを起動する
+            shape = CircleShape,
             modifier = Modifier
-                .size(100.dp)  // ボタンのサイズを設定
-                .background(Color(0xFF00BFFF))  // ボタンの色をライトブルーに
+                .size(100.dp)
+                .background(Color(0xFF00BFFF))
         ) {
             Text(
                 text = "Done",
@@ -76,13 +110,9 @@ fun ActionScreen(
         }
 
         Spacer(modifier = Modifier.height(32.dp))
-
-        // 地図を表示するボタン
-//        Button(onClick = onMapButtonClick) {
-//            Text(text = "地図を表示する")
-//        }
     }
 }
+
 
 // この項目を削除するかどうかをPOPUPする。
 // Action完了ボタンをタップすると、現在の緯度経度を記憶し、地図画面に遷移する。

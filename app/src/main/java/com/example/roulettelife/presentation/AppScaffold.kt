@@ -1,7 +1,7 @@
 package com.example.roulettelife.presentation
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,10 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.roulettelife.presentation.action.ActionScreen
 import com.example.roulettelife.presentation.home.RouletteWeekdayScreen
 import com.example.roulettelife.presentation.home.RouletteWeekendScreen
-import com.example.roulettelife.presentation.map.MapScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekendSettingsScreen
-import com.google.android.gms.maps.model.LatLng
 
 @Composable
 fun AppScaffold() {
@@ -75,20 +73,15 @@ fun AppNavHost(
             val selectedItem = backStackEntry.arguments?.getString("selectedItem") ?: ""
             ActionScreen(
                 selectedItem = selectedItem,
-                onMapButtonClick = { navController.navigate(Screens.MAP.route) }
+                onPhotoSaved = { uri, diaryEntry ->
+                    // ここで写真の保存結果を処理
+                    Log.d("ActionScreen", "Photo saved at: $uri")
+                    Log.d("ActionScreen", "Diary entry: $diaryEntry")
+
+                    // 例: 写真が保存された後に別の画面へ遷移する
+                    // navController.navigate("nextScreen")
+                }
             )
-        }
-
-        // Map画面
-        composable(Screens.MAP.route) { backStackEntry ->
-            val latitude = backStackEntry.arguments?.getString("latitude")?.toDoubleOrNull() ?: 35.6895 // デフォルトは東京
-            val longitude = backStackEntry.arguments?.getString("longitude")?.toDoubleOrNull() ?: 139.6917
-
-            // 位置情報をLatLng型に変換
-            val location = LatLng(latitude, longitude)
-
-            // MapScreenに位置情報を渡す
-            MapScreen(currentPosition = location)
         }
     }
 }

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">RouletteLife</string>
+
+    <!--  Permission  -->
+    <string name="gps_dialog_title">This app requires GPS to be enabled.</string>
+    <string name="gps_dialog_message">To enable GPS, you will be redirected to the settings screen.</string>
+    <string name="gps_dialog_positive_button">OK.</string>
+    <string name="gps_dialog_negative_button">Cancel.</string>
+    <string name="request_background_dialog">Background Location Permission</string>
+    <string name="request_background_dialog_message">This app needs background location access. Please enable 「Allow all the time」 in the settings.</string>
+
 </resources>

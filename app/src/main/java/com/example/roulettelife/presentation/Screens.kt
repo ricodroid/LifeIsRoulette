@@ -10,6 +10,4 @@ sealed class Screens(val route: String) {
     object ACTION : Screens("action/{selectedItem}") {
         fun createRoute(selectedItem: String) = "action/$selectedItem"
     }
-
-    object MAP : Screens("map")
 }
