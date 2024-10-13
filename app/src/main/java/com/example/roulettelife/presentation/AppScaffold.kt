@@ -111,7 +111,10 @@ fun AppNavHost(
 
         // 日記一覧画面
         composable(Screens.DIARY_LIST.route) {
-            DiaryListScreen(navController = navController, context = context)
+            DiaryListScreen(navController = navController, context = context,
+                onRouletteButtonClick = {
+                    navController.navigate(Screens.ROULETTE_WEEKDAY.route)
+                })
         }
 
         // 日記詳細画面
