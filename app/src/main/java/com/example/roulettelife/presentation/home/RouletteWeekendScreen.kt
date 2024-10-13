@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
@@ -88,37 +91,40 @@ fun RouletteWeekendScreen(
 
     // メニューの状態を保持
     var expanded by remember { mutableStateOf(false) }
+    val poppinsFontFamily = FontFamily(
+        Font(R.font.poppins_regular, FontWeight.Normal)
+    )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "週末ルーレット") },
+                title = {
+                    Text(
+                        text = "Weekend Roulette",
+                        fontFamily = poppinsFontFamily,
+                        color = Color(0xFFFFA500)
+                    )
+                },
                 actions = {
-                    // ハンバーガーメニューアイコンを追加
                     IconButton(onClick = { expanded = true }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
-
-                    // ドロップダウンメニューを追加
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
-                        // 設定に移動
                         DropdownMenuItem(
-                            text = { Text("設定に移動") },
+                            text = { Text("Go to Settings") },
                             onClick = {
                                 expanded = false
-                                onSettingButtonClick()  // 設定画面に移動
+                                onSettingButtonClick()
                             }
                         )
-
-                        // 一覧画面に移動
                         DropdownMenuItem(
-                            text = { Text("一覧画面に移動") },
+                            text = { Text("Go to List Screen") },
                             onClick = {
                                 expanded = false
-                                navController.navigate(Screens.DIARY_LIST.route)  // 一覧画面に移動
+                                navController.navigate(Screens.DIARY_LIST.route)
                             }
                         )
                     }

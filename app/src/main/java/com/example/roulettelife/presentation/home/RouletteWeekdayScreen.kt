@@ -1,6 +1,8 @@
 package com.example.roulettelife.presentation.home
 
+import android.os.Build
 import android.text.TextPaint
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,6 +27,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
@@ -34,6 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouletteWeekdayScreen(
@@ -88,41 +94,44 @@ fun RouletteWeekdayScreen(
 
     // メニューの状態を保持
     var expanded by remember { mutableStateOf(false) }
+    // Custom rounded font
+    val poppinsFontFamily = FontFamily(
+        Font(R.font.poppins_regular, FontWeight.Normal)
+    )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "平日ルーレット") },
+                title = {
+                    Text(
+                        text = "Weekday Roulette",
+                        fontFamily = poppinsFontFamily,
+                        color = Color.Blue
+                    )
+                },
                 actions = {
-                    // ハンバーガーメニューアイコンを追加
                     IconButton(onClick = { expanded = true }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
-
-                    // ドロップダウンメニューを追加
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     ) {
-                        // 設定に移動
                         DropdownMenuItem(
-                            text = { Text("設定に移動") },  // 設定画面に移動するオプション
+                            text = { Text("Go to Settings") },
                             onClick = {
                                 expanded = false
-                                onSettingButtonClick()  // 設定画面に移動
+                                onSettingButtonClick()
                             }
                         )
-
-                        // 一覧画面に移動
                         DropdownMenuItem(
-                            text = { Text("一覧画面に移動") },  // 一覧画面に移動するオプション
+                            text = { Text("Go to List Screen") },
                             onClick = {
                                 expanded = false
-                                navController.navigate(Screens.DIARY_LIST.route)  // 一覧画面に移動
+                                navController.navigate(Screens.DIARY_LIST.route)
                             }
                         )
                     }
-
                 }
             )
         },

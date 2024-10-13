@@ -94,4 +94,7 @@ dependencies {
     implementation ("androidx.camera:camera-view:1.3.4")
     implementation ("androidx.camera:camera-extensions:1.3.4")
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("androidx.compose.ui:ui:1.7.3")
+    implementation("androidx.compose.ui:ui-text:1.7.3")
+    implementation("androidx.compose.material3:material3:1.3.0")
 }
