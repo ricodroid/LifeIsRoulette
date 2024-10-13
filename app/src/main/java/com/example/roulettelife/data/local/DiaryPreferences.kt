@@ -3,6 +3,9 @@ package com.example.roulettelife.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class DiaryPreferences(context: Context) {
 
@@ -41,7 +44,9 @@ class DiaryPreferences(context: Context) {
     // 日記を保存（写真のURIと日記の内容を引数に取る）
     fun saveDiary(photoUri: String, diaryEntry: String) {
         val editor = sharedPreferences.edit()
-        editor.putString(photoUri, diaryEntry)  // URIをキーにして日記を保存
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()) // 現在の日付を取得
+        val combinedEntry = "$diaryEntry\nDate: $currentDate"  // 日記と日付を結合して保存
+        editor.putString(photoUri, combinedEntry)  // 日記に日付を追加
         editor.apply()
     }
 

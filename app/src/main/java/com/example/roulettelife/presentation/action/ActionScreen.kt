@@ -12,10 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,8 +33,8 @@ import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
 import java.text.SimpleDateFormat
 import java.util.*
+
 @RequiresApi(Build.VERSION_CODES.Q)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActionScreen(
     selectedItem: String,
