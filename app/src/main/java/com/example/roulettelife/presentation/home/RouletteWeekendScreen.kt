@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -239,7 +240,12 @@ fun RouletteWeekendScreen(
                             }
                         }
                     },
-                    enabled = !isSpinning
+                    enabled = !isSpinning,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63)),
+                    modifier = Modifier
+                        .width(210.dp)
+                        .height(100.dp)
+                        .padding(16.dp)
                 ) {
                     Text(text = if (isSpinning) "Spinning..." else "Spin")
                 }
