@@ -111,25 +111,16 @@ fun AppNavHost(
 
         // 日記一覧画面
         composable(Screens.DIARY_LIST.route) {
-            DiaryListScreen(
-                navController = navController,
-                context = context
-            )
+            DiaryListScreen(navController = navController, context = context)
         }
 
-        // 日記の詳細画面 (写真のURIに基づいて日記を表示)
+        // 日記詳細画面
         composable(
-            route = "${Screens.DIARY_DETAIL.route}/{photoUri}",
-            arguments = listOf(
-                navArgument("photoUri") { type = NavType.StringType }
-            )
+            route = Screens.DIARY_DETAIL.route,
+            arguments = listOf(navArgument("photoUri") { type = NavType.StringType })
         ) { backStackEntry ->
-            val photoUri = Uri.decode(backStackEntry.arguments?.getString("photoUri") ?: "")
-            DiaryDetailScreen(
-                navController = navController,
-                photoUri = photoUri,
-                context = context
-            )
+            val photoUri = backStackEntry.arguments?.getString("photoUri") ?: ""
+            DiaryDetailScreen(navController = navController, photoUri = photoUri)
         }
     }
 }
