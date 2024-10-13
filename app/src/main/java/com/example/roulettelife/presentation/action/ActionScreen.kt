@@ -20,12 +20,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.roulettelife.presentation.Screens
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun ActionScreen(
     selectedItem: String,
+    navController: NavController,
     onPhotoSaved: (Uri, String) -> Unit
 ) {
     val currentDate = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault()).format(Date())
@@ -59,6 +62,9 @@ fun ActionScreen(
             val uri = savePhotoToExternalStorage(context, bitmap)
             val diaryEntry = "今日は $selectedItem を完了しました。" // 日記内容のサンプル
             onPhotoSaved(uri, diaryEntry)
+
+            // DiaryScreen に遷移
+            navController.navigate(Screens.DIARY.createRoute(uri.toString(), diaryEntry))
         }
     }
 

@@ -1,15 +1,19 @@
 package com.example.roulettelife.presentation
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.roulettelife.presentation.action.ActionScreen
+import com.example.roulettelife.presentation.diary.DiaryScreen
 import com.example.roulettelife.presentation.home.RouletteWeekdayScreen
 import com.example.roulettelife.presentation.home.RouletteWeekendScreen
 import com.example.roulettelife.presentation.rouletteSettings.RouletteWeekdaySettingsScreen
@@ -73,14 +77,29 @@ fun AppNavHost(
             val selectedItem = backStackEntry.arguments?.getString("selectedItem") ?: ""
             ActionScreen(
                 selectedItem = selectedItem,
+                navController = navController,
                 onPhotoSaved = { uri, diaryEntry ->
-                    // ここで写真の保存結果を処理
-                    Log.d("ActionScreen", "Photo saved at: $uri")
-                    Log.d("ActionScreen", "Diary entry: $diaryEntry")
-
-                    // 例: 写真が保存された後に別の画面へ遷移する
-                    // navController.navigate("nextScreen")
+                    // 写真保存後にDiary画面へ遷移
+                    navController.navigate(Screens.DIARY.createRoute(uri.toString(), diaryEntry))
                 }
+            )
+        }
+
+        // 日記画面 (写真のURIと日記の内容を受け取る)
+        composable(
+            route = Screens.DIARY.route,
+            arguments = listOf(
+                navArgument("photoUri") { type = NavType.StringType },
+                navArgument("diaryEntry") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val photoUri = Uri.decode(backStackEntry.arguments?.getString("photoUri") ?: "")
+            val diaryEntry = Uri.decode(backStackEntry.arguments?.getString("diaryEntry") ?: "")
+
+            DiaryScreen(
+                navController = navController,
+                photoUri = photoUri,
+                diaryEntry = diaryEntry
             )
         }
     }
