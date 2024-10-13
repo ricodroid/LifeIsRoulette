@@ -28,6 +28,8 @@
     <string name="diary_photo">日記の写真</string>
     <string name="please_enter_diary">日記を入力してください</string>
     <string name="save">保存</string>
+    <string name="done_editing">完了</string>
+    <string name="edit">編集</string>
 
     <!--  DiaryListScreen  -->
     <string name="diary">日記</string>

@@ -25,6 +25,8 @@
     <string name="diary_photo">TDiary Photot</string>
     <string name="please_enter_diary">Please enter your diary</string>
     <string name="save">Save</string>
+    <string name="done_editing">Done</string>
+    <string name="edit">edit</string>
 
     <!--  DiaryListScreen  -->
     <string name="diary">Diary</string>
