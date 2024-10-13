@@ -2,6 +2,8 @@ package com.example.roulettelife.presentation
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -46,6 +48,7 @@ fun AppScaffold(context: Context) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun AppNavHost(
     navController: NavHostController,  // NavHostControllerを使用
@@ -62,7 +65,8 @@ fun AppNavHost(
             RouletteWeekendScreen(
                 navController = navController,
                 onSettingButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND_SETTINGS.route) },
-                onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) }
+                onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY.route) },
+                onDiaryButtonClick = { navController.navigate(Screens.DIARY_LIST.route) }
             )
         }
 
@@ -71,7 +75,8 @@ fun AppNavHost(
             RouletteWeekdayScreen(
                 navController = navController,
                 onSettingButtonClick = { navController.navigate(Screens.ROULETTE_WEEKDAY_SETTINGS.route) },
-                onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND.route) }
+                onChangeRouletteButtonClick = { navController.navigate(Screens.ROULETTE_WEEKEND.route) },
+                onDiaryButtonClick = { navController.navigate(Screens.DIARY_LIST.route) }
             )
         }
 

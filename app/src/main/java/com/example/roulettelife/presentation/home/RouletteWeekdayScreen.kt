@@ -49,6 +49,7 @@ fun RouletteWeekdayScreen(
     navController: NavController,
     onSettingButtonClick: () -> Unit,
     onChangeRouletteButtonClick: () -> Unit,
+    onDiaryButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
@@ -283,6 +284,10 @@ fun RouletteWeekdayScreen(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = { onDiaryButtonClick() }) {
+                    Text(text = "Diary")
+                }
             }
         }
     )
