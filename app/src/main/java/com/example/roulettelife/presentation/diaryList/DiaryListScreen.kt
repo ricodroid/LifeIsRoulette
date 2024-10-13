@@ -27,11 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.roulettelife.R
 import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
 
@@ -54,7 +56,7 @@ fun DiaryListScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Diary List") },
+                title = { Text(stringResource(id = R.string.diary)) },
                 actions = {
                     IconButton(onClick = { onRouletteButtonClick() }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -75,7 +77,9 @@ fun DiaryListScreen(
                     val entry = diaryList[index]
                     val diaryEntryWithDate = entry.value.split("\n") // 日記と日付を分離
                     val diaryText = diaryEntryWithDate[0] // 日記の内容
-                    val diaryDate = if (diaryEntryWithDate.size > 1) diaryEntryWithDate[1] else "Date not available" // 日付
+                    val diaryDate = if (diaryEntryWithDate.size > 1) diaryEntryWithDate[1] else stringResource(
+                        id = R.string.not_available
+                    ) // 日付
 
                     DiaryListItem(
                         photoUri = entry.key,   // key は photoUri
@@ -110,7 +114,7 @@ fun DiaryListItem(
         if (photoUri.isNotEmpty()) {
             AsyncImage(
                 model = Uri.parse(photoUri),
-                contentDescription = "Diary Photo",
+                contentDescription = stringResource(id = R.string.diary_photo),
                 modifier = Modifier
                     .size(64.dp)
                     .padding(end = 16.dp),

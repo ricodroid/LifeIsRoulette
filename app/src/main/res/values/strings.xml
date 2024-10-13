@@ -9,4 +9,25 @@
     <string name="request_background_dialog">Background Location Permission</string>
     <string name="request_background_dialog_message">This app needs background location access. Please enable 「Allow all the time」 in the settings.</string>
 
+    <!--  DiaryScreen  -->
+    <string name="enter_diary">Please enter your diary</string>
+    <string name="delete_item">Delete this item?</string>
+    <string name="delete">Delete</string>
+    <string name="keep">Keep</string>
+
+    <!--  ActionScreen  -->
+    <string name="completed_item">I completed %1$s today!</string>
+    <string name="today_item">Today is %1$s</string>
+    <string name="lets_turn">Let\'s turn this boring day into something memorable!</string>
+    <string name="highlight">Today\'s highlight</string>
+
+    <!--  DiaryDetailScreen  -->
+    <string name="diary_photo">TDiary Photot</string>
+    <string name="please_enter_diary">Please enter your diary</string>
+    <string name="save">Save</string>
+
+    <!--  DiaryListScreen  -->
+    <string name="diary">Diary</string>
+    <string name="not_available">Date not available</string>
+
 </resources>

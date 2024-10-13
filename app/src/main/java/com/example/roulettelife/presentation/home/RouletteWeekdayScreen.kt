@@ -119,14 +119,14 @@ fun RouletteWeekdayScreen(
                         onDismissRequest = { expanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Go to Settings") },
+                            text = { Text("Settings") },
                             onClick = {
                                 expanded = false
                                 onSettingButtonClick()
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Go to List Screen") },
+                            text = { Text("List") },
                             onClick = {
                                 expanded = false
                                 navController.navigate(Screens.DIARY_LIST.route)

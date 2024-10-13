@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -79,7 +80,7 @@ fun ActionScreen(
 
         bitmap?.let {
             val uri = savePhotoToExternalStorage(context, bitmap)
-            val diaryEntry = "I completed $selectedItem today!"  // 英語に変更
+            val diaryEntry = context.getString(R.string.completed_item, selectedItem)
             onPhotoSaved(uri, diaryEntry)
 
             // SharedPreferencesから選択された項目を削除
@@ -106,7 +107,7 @@ fun ActionScreen(
     ) {
         // 日付表示（モダンなフォントと色）
         Text(
-            text = "Today is $currentDate",
+            text = context.getString(R.string.today_item, currentDate),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = poppinsFontFamily,
@@ -117,7 +118,7 @@ fun ActionScreen(
 
         // メッセージ表示（英語に翻訳）
         Text(
-            text = "Let's turn this boring day into something memorable!",
+            text = stringResource(id = R.string.lets_turn),
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = poppinsFontFamily,
@@ -128,7 +129,7 @@ fun ActionScreen(
 
         // 選択された項目の表示
         Text(
-            text = "Today's highlight",
+            text = stringResource(id = R.string.highlight),
             fontSize = 22.sp,
             fontStyle = FontStyle.Italic,
             fontFamily = poppinsFontFamily,

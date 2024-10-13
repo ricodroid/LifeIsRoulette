@@ -20,9 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.roulettelife.R
 import com.example.roulettelife.data.local.DiaryPreferences
 
 
@@ -50,7 +52,7 @@ fun DiaryDetailScreen(
         if (photoUri.isNotEmpty()) {
             AsyncImage(
                 model = Uri.parse(photoUri),
-                contentDescription = "Diary Photo",
+                contentDescription = stringResource(id = R.string.diary_photo),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -63,7 +65,7 @@ fun DiaryDetailScreen(
         TextField(
             value = diaryText,
             onValueChange = { diaryText = it },
-            label = { Text("日記を入力してください") },
+            label = { Text(stringResource(id = R.string.please_enter_diary)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
@@ -78,7 +80,7 @@ fun DiaryDetailScreen(
                 navController.popBackStack()
             }
         ) {
-            Text(text = "日記を保存")
+            Text(text = stringResource(id = R.string.save))
         }
     }
 }

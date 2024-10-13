@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -69,7 +70,7 @@ fun DiaryScreen(
         TextField(
             value = diaryText,
             onValueChange = { diaryText = it },
-            label = { Text("Please enter your diary") },
+            label = { Text(stringResource(id = R.string.enter_diary)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -89,7 +90,7 @@ fun DiaryScreen(
         if (showDeleteDialog) {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
-                title = { Text("Delete this item?") },
+                title = { Text(stringResource(id = R.string.delete_item)) },
                 text = { Text("Delete $diaryEntry ？") },
                 confirmButton = {
                     Button(
@@ -105,7 +106,7 @@ fun DiaryScreen(
                             onRouletteButtonClick()
                         }
                     ) {
-                        Text("Delete")
+                        Text(stringResource(id = R.string.delete))
                     }
                 },
                 dismissButton = {
@@ -113,7 +114,7 @@ fun DiaryScreen(
                         showDeleteDialog = false
                         onRouletteButtonClick()
                     }) {
-                        Text("Keep")
+                        Text(stringResource(id = R.string.keep))
                     }
                 }
             )
