@@ -69,7 +69,7 @@ fun DiaryScreen(
         TextField(
             value = diaryText,
             onValueChange = { diaryText = it },
-            label = { Text("日記を入力してください") },
+            label = { Text("Please enter your diary") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -82,15 +82,15 @@ fun DiaryScreen(
             // 削除確認ダイアログを表示
             showDeleteDialog = true
         }) {
-            Text(text = "日記を保存")
+            Text(text = "Save")
         }
 
         // 削除確認ダイアログ
         if (showDeleteDialog) {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
-                title = { Text("項目を削除しますか？") },
-                text = { Text("$diaryEntry を削除しますか？") },
+                title = { Text("Delete this item?") },
+                text = { Text("Delete $diaryEntry ？") },
                 confirmButton = {
                     Button(
                         onClick = {
@@ -105,7 +105,7 @@ fun DiaryScreen(
                             onRouletteButtonClick()
                         }
                     ) {
-                        Text("削除")
+                        Text("Delete")
                     }
                 },
                 dismissButton = {
@@ -113,7 +113,7 @@ fun DiaryScreen(
                         showDeleteDialog = false
                         onRouletteButtonClick()
                     }) {
-                        Text("残す")
+                        Text("Keep")
                     }
                 }
             )
