@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +47,7 @@ fun RouletteWeekdaySettingsScreen(
 
     // ルーレットのリスト項目を保持する状態
     var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekdayRouletteItems()) }
+
     var newItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -68,6 +70,7 @@ fun RouletteWeekdaySettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // スクロール可能なリスト
+                // スクロール可能なリスト
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,7 +86,6 @@ fun RouletteWeekdaySettingsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // bodyMedium -> bodyLarge などに変更
                             Text(text = item, style = MaterialTheme.typography.bodyLarge)
 
                             IconButton(onClick = {
@@ -123,7 +125,7 @@ fun RouletteWeekdaySettingsScreen(
                                     if (newItem.isNotBlank()) {
                                         // 新しいアイテムを追加し、SharedPreferences に保存
                                         roulettePreferences.saveWeekdayRouletteItems(newItem)
-                                        rouletteItems = roulettePreferences.getWeekdayRouletteItems().toList()  // リストを更新して、List<String>を確保
+                                        rouletteItems = roulettePreferences.getWeekdayRouletteItems().toList()  // リストを更新
                                         newItem = ""  // 入力フィールドをクリア
                                         showDialog = false
                                     }

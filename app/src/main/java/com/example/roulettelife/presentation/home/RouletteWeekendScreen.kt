@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,12 +19,14 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
 import com.example.roulettelife.presentation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouletteWeekendScreen(
     navController: NavController,
@@ -33,15 +36,25 @@ fun RouletteWeekendScreen(
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
 
-    // ルーレットの選択肢
-    // ルーレットの選択肢を取得し、10個以上の場合はランダムで10個を選択
-    var allOptions = roulettePreferences.getWeekendRouletteItems()
+    // XML から defaultItems を取得
+    val defaultItems = remember { context.resources.getStringArray(R.array.default_weekend_roulette_items).toMutableList() }
+
+    // SharedPreferences から削除されたデフォルトアイテムとユーザーが追加した項目を取得
+    val deletedDefaultItems = remember { roulettePreferences.getDeletedDefaultItems() }
+    var allOptions = remember {
+        mutableStateOf(
+            // 削除されたデフォルトアイテムを除外して、ユーザーが追加したアイテムとデフォルトアイテムを結合
+            roulettePreferences.getWeekendRouletteItems() + defaultItems.filterNot { it in deletedDefaultItems }
+        )
+    }
+
+    // ルーレットに表示する項目をランダムで10個選択
     val options by remember {
         mutableStateOf(
-            if (allOptions.size > 10) {
-                allOptions.shuffled().take(10)  // ランダムで10個選択
+            if (allOptions.value.size > 10) {
+                allOptions.value.shuffled().take(10)  // ランダムで10個選択
             } else {
-                allOptions  // 10個未満ならそのまま表示
+                allOptions.value  // 10個未満ならそのまま表示
             }
         )
     }
@@ -165,7 +178,7 @@ fun RouletteWeekendScreen(
 
                         // ポインターが指しているセクションのインデックスを計算
                         val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
-                        
+
                         selectedOption = options[selectedIndex]
 
                         // 3秒間停止してからActionScreenへ遷移

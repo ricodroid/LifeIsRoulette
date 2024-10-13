@@ -1,9 +1,10 @@
 package com.example.roulettelife.data.local
 
-// SharedPreferencesでルーレットの目を管理
+
 import android.content.Context
 import android.content.SharedPreferences
 
+// SharedPreferencesでルーレットの目を管理
 class RoulettePreferences(context: Context) {
 
     private val sharedPreferences: SharedPreferences =
@@ -12,6 +13,7 @@ class RoulettePreferences(context: Context) {
     companion object {
         private const val ROULETTE_PREF_KEY_WEEKEND = "roulette_items_weekend"
         private const val ROULETTE_PREF_KEY_WEEKDAY = "roulette_items_weekday"
+        private const val DELETED_DEFAULT_ITEMS_KEY = "deleted_default_items"
         private const val PREFERENCES_NAME = "roulette_preferences"
     }
 
@@ -74,5 +76,30 @@ class RoulettePreferences(context: Context) {
         val editor = sharedPreferences.edit()
         editor.putString(ROULETTE_PREF_KEY_WEEKDAY, itemsString)
         editor.apply()
+    }
+
+    // 削除されたデフォルトアイテムを取得
+    fun getDeletedDefaultItems(): Set<String> {
+        return sharedPreferences.getStringSet(DELETED_DEFAULT_ITEMS_KEY, emptySet()) ?: emptySet()
+    }
+
+    // 削除されたデフォルトアイテムを保存
+    fun saveDeletedDefaultItem(item: String) {
+        val deletedItems = getDeletedDefaultItems().toMutableSet()
+        deletedItems.add(item)
+        sharedPreferences.edit().putStringSet(DELETED_DEFAULT_ITEMS_KEY, deletedItems).apply()
+    }
+
+    // 削除されたデフォルトアイテムを復元
+    fun removeDeletedDefaultItem(item: String) {
+        val deletedItems = getDeletedDefaultItems().toMutableSet()
+        deletedItems.remove(item)
+        sharedPreferences.edit().putStringSet(DELETED_DEFAULT_ITEMS_KEY, deletedItems).apply()
+    }
+
+    // アイテムを保存する共通関数
+    private fun saveItems(key: String, items: List<String>) {
+        val itemsString = items.joinToString(",")
+        sharedPreferences.edit().putString(key, itemsString).apply()
     }
 }
