@@ -3,8 +3,10 @@ package com.example.roulettelife.presentation.diaryList
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,16 +16,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -37,21 +50,17 @@ import com.example.roulettelife.R
 import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun DiaryListScreen(
     navController: NavController,
     context: Context,
     onRouletteButtonClick: () -> Unit,
 ) {
-    // DiaryPreferencesを使用して保存された日記の一覧を取得
     val diaryPreferences = DiaryPreferences(context)
-    val diaryEntries = diaryPreferences.getAllDiaries()
-    Log.d("diaryEntries", "diaryEntries=$diaryEntries")
+    var diaryEntries by remember { mutableStateOf(diaryPreferences.getAllDiaries()) }
 
-    // 日記のURIと内容をリスト形式に変換
-    val diaryList = diaryEntries.entries.toList()  // List<Map.Entry<String, String>>
-    Log.d("diaryList", "diaryList=$diaryList")
+    val diaryList = diaryEntries.entries.toList()
 
     Scaffold(
         topBar = {
@@ -65,29 +74,65 @@ fun DiaryListScreen(
             )
         },
         content = { padding ->
-            // LazyColumnで日記の一覧を表示
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .padding(16.dp)
             ) {
-                // Listのサイズを取得して items に渡す
                 items(diaryList.size) { index ->
                     val entry = diaryList[index]
-                    val diaryEntryWithDate = entry.value.split("\n") // 日記と日付を分離
-                    val diaryText = diaryEntryWithDate[0] // 日記の内容
+                    val diaryEntryWithDate = entry.value.split("\n")
+                    val diaryText = diaryEntryWithDate[0]
                     val diaryDate = if (diaryEntryWithDate.size > 1) diaryEntryWithDate[1] else stringResource(
                         id = R.string.not_available
-                    ) // 日付
+                    )
 
-                    DiaryListItem(
-                        photoUri = entry.key,   // key は photoUri
-                        diaryEntry = diaryText, // value は日記
-                        diaryDate = diaryDate, // 日付を追加
-                        onClick = {
-                            // 項目をクリックした時のアクション (詳細画面へ遷移する例)
-                            navController.navigate(Screens.DIARY_DETAIL.createRoute(entry.key))
+                    val dismissState = rememberDismissState()
+
+                    if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                        LaunchedEffect(dismissState) {
+                            if (dismissState.dismissDirection == DismissDirection.EndToStart && dismissState.currentValue == DismissValue.DismissedToStart) {
+                                diaryPreferences.removeDiary(entry.key)
+                                diaryEntries = diaryPreferences.getAllDiaries()
+                            } else {
+                                dismissState.reset()  // 削除を回避
+                            }
+                        }
+                    }
+
+                    SwipeToDismiss(
+                        state = dismissState,
+                        background = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Red)
+                                    .padding(8.dp),
+                                contentAlignment = Alignment.CenterEnd
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        directions = setOf(DismissDirection.EndToStart),
+                        dismissContent = {
+                            // アイテム自体の背景を白に設定
+                            DiaryListItem(
+                                photoUri = entry.key,
+                                diaryEntry = diaryText,
+                                diaryDate = diaryDate,
+                                onClick = {
+                                    navController.navigate(Screens.DIARY_DETAIL.createRoute(entry.key))
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.White)  // ここで背景を白に設定
+                                    .padding(8.dp)
+                            )
                         }
                     )
                 }
@@ -100,13 +145,12 @@ fun DiaryListScreen(
 fun DiaryListItem(
     photoUri: String,
     diaryEntry: String,
-    diaryDate: String,  // 日付を表示するための引数を追加
-    onClick: () -> Unit
+    diaryDate: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier  // Modifierを引数として受け取る
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier = modifier
             .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.Start
     ) {
