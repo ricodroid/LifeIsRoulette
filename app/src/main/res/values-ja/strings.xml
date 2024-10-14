@@ -23,6 +23,7 @@
     <string name="today_item">今日は %1$s です</string>
     <string name="lets_turn">退屈な一日を思い出深い日に変えましょう！</string>
     <string name="highlight">今日のハイライト</string>
+    <string name="delete_item_detail">一度削除すると、このルーレット項目は次回以降表示されなくなります。</string>
 
     <!--  DiaryDetailScreen  -->
     <string name="diary_photo">日記の写真</string>

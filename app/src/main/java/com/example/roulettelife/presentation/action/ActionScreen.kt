@@ -143,7 +143,7 @@ fun ActionScreen(
             fontSize = 26.sp,
             fontStyle = FontStyle.Italic,
             fontFamily = poppinsFontFamily,
-            color = Color(0xFF333333),
+            color = Color(0xFFED1A3D),
             modifier = Modifier.padding(bottom = 24.dp),
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )

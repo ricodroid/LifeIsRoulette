@@ -20,6 +20,7 @@
     <string name="today_item">Today is %1$s</string>
     <string name="lets_turn">Let\'s turn this boring day into something memorable!</string>
     <string name="highlight">Today\'s highlight</string>
+    <string name="delete_item_detail">Once deleted, this roulette item will no longer appear in future rounds.</string>
 
     <!--  DiaryDetailScreen  -->
     <string name="diary_photo">TDiary Photot</string>

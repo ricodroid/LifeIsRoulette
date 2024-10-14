@@ -96,7 +96,7 @@ fun DiaryScreen(
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             title = { Text(stringResource(id = R.string.delete_item)) },
-            text = { Text("Delete $diaryEntry ？") },
+            text = { Text(stringResource(id = R.string.delete_item_detail)) },
             confirmButton = {
                 Button(
                     onClick = {
