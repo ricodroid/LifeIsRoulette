@@ -1,227 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="default_weed_day_roulette_items">
-        <item>新しいカフェでコーヒーを飲む</item>
-        <item>街で見つけたアートにポーズを取る</item>
-        <item>初対面の人に「今日のおすすめ」を聞いて試す</item>
-        <item>現地のローカルフードを食べる</item>
-        <item>次に会う人に「好きな映画」を聞いてみる</item>
-        <item>10秒間だけランダムにダンス！</item>
-        <item>手紙を自分に書いて、未来の自分へ送る</item>
-        <item>誰かに「今日どうですか？」と声をかける</item>
-        <item>1ドルショップで1つだけアイテムを買う</item>
-        <item>ランダムに撮った写真1枚をSNSに投稿する</item>
-        <item>次に見かけた本屋に入って、本を1冊買う</item>
-        <item>アイスクリーム屋さんで「いつもと違うフレーバー」を頼む</item>
-        <item>道に迷ってみる</item>
-        <item>カナダでの「初めて」を見つける</item>
-        <item>カナダの動物を探して写真を撮る</item>
-        <item>風変わりな帽子を被って街を歩く</item>
-        <item>路上パフォーマンスを見る</item>
-        <item>お気に入りの音楽を外で大声で歌う</item>
-        <item>新しいジャンルの音楽を聴いてみる</item>
-        <item>カフェで知らない人と隣の席に座る</item>
-        <item>現地で流行っている雑誌を読んでみる</item>
-        <item>好きなアイスクリームショップを見つける</item>
-        <item>ランダムな商品をスーパーマーケットで買う</item>
-        <item>公園で子供と一緒に遊ぶ</item>
-        <item>道端で出会った犬を撫でる</item>
-        <item>カナダ人の友達を作るためにSNSを活用する</item>
-        <item>新しい場所に散歩に行く</item>
-        <item>カナダのバス停で会った人と会話する</item>
-        <item>新しいスポーツに挑戦する</item>
-        <item>アクティビティのクラブに参加する</item>
-        <item>写真を撮りながら、写真コンテストに応募する</item>
-        <item>現地の人とカナダ料理を一緒に作る</item>
-        <item>街の中心部に行き、ランダムなカフェに入る</item>
-        <item>現地の花を観察し写真を撮る</item>
-        <item>カナダの有名なコーヒーチェーン店を巡る</item>
-        <item>現地で作ったものを手土産にする</item>
-        <item>スケートボードやローラースケートを試す</item>
-        <item>現地のファッションショップでおしゃれな帽子を買う</item>
-        <item>外国人観光客に地元のおすすめを教える</item>
-        <item>ランダムに入ったカフェで英語で会話をしてみる</item>
-        <item>お土産ショップでユニークなアイテムを探す</item>
-        <item>図書館でカナダの歴史に関する本を借りる</item>
-        <item>ストリートパフォーマーに話しかけてみる</item>
-        <item>駅近くでおすすめの観光名所を聞いてみる</item>
-        <item>カナダのビールを試してみる</item>
-        <item>地元の図書館で読書する</item>
-        <item>英語の本を1冊買って読む</item>
-        <item>一つの場所で1時間静かに過ごす</item>
-        <item>地元の野菜市場で買い物する</item>
-        <item>一日中、現地の人と英語だけで話す</item>
-        <item>次に会った人と短いインタビューをする</item>
-        <item>地元のアクティビティクラブに参加する</item>
-        <item>ランダムにカフェに入って、地元のおすすめメニューを注文する</item>
-        <item>ビーチに行って新しい友達を作る</item>
-        <item>次に通りかかった場所で1時間過ごす</item>
-        <item>カナダの珍しい植物を探して写真を撮る</item>
-        <item>写真でその日の記録を残す</item>
-        <item>お気に入りの音楽を聞いてリラックスする</item>
-        <item>新しいファッションスタイルを試す</item>
-        <item>ランダムなカフェに入って、新しいドリンクを注文する</item>
-        <item>街で見つけた面白い建物を観察する</item>
-        <item>地元の人におすすめのカフェを聞く</item>
-        <item>まだ行ったことがないカフェに挑戦！</item>
-        <item>一年後の自分に向けて手紙を書く</item>
-        <item>母親に手紙を送る</item>
-        <item>英語のリスニング練習を30分する</item>
-        <item>新しい英単語を10個覚える</item>
-        <item>その日に覚えた単語を使ってみる。</item>
-        <item>現地のニュースを読む</item>
-        <item>カナダのニュースやトピックについて学ぶ。</item>
-        <item>本を10ページ読む</item>
-        <item>カフェで勉強タイム1時間</item>
-        <item>30分のヨガやストレッチをする</item>
-        <item>パークベンチで読書する</item>
-        <item>1日中スマホを使わずに過ごす</item>
-        <item>街で面白い看板を見つけて写真を撮る</item>
-        <item>ベーカリーで好きなパンを一つ選んで食べる</item>
-        <item>現地で有名なソフトドリンクを飲んでみる</item>
-        <item>カナダのリスを見つけて写真を撮る</item>
-        <item>街の名前が入ったTシャツを買う</item>
-        <item>ランダムな人に「カナダの好きなところは？」と聞く</item>
-        <item>地元の人に「一番おいしいレストラン」を聞く</item>
-        <item>1分間だけ立ち止まって目を閉じる</item>
-        <item>道行く人に「地元のおすすめ」を尋ねる</item>
-        <item>街角で音楽を演奏している人に話しかける</item>
-        <item>ショッピングモールで特別なアイテムを見つける</item>
-        <item>ランダムに見つけたベンチでのんびり過ごす</item>
-        <item>現地のビールを一口だけ試してみる</item>
-        <item>街の名所を一つだけ見つける</item>
-        <item>初めて食べるデザートを注文する</item>
-        <item>道に迷ってみて、地元の風景を楽しむ</item>
-        <item>新しい帽子をかぶって街を歩く</item>
-        <item>風の強い日に凧を飛ばしてみる</item>
-        <item>川辺で釣りをしている人に話しかける</item>
-        <item>バス停で出会った人に次の観光スポットを教えてもらう</item>
-        <item>地元のブックカフェで時間を過ごす</item>
-        <item>木に囲まれた場所で自然の音を聞く</item>
-        <item>気に入ったカフェで特別なケーキを注文する</item>
-        <item>現地のフードマーケットでランチを楽しむ</item>
-        <item>街のランドマークで写真を撮る</item>
-        <item>次に見つけた橋を渡る</item>
-        <item>地元の手作りマーケットを散策する</item>
-        <item>ベンチで人間観察を楽しむ</item>
-        <item>公共の庭園でリラックスする</item>
-        <item>現地のスポーツを体験してみる</item>
-        <item>ランダムなレストランで新しい料理を試す</item>
-        <item>地元の人に次に訪れるべき場所を教えてもらう</item>
-        <item>フードコートで気になった料理を食べてみる</item>
-        <item>ユニークな形の建物を写真に撮る</item>
-        <item>ランダムなスポーツイベントを見に行く</item>
-        <item>現地のカフェで朝食を楽しむ</item>
-        <item>地元の市場で新鮮な野菜を買う</item>
-        <item>朝一番で新しいパン屋に行く</item>
-        <item>お気に入りの音楽を外で流しながら散歩する</item>
-        <item>地元のファーマーズマーケットで新しい食材を探す</item>
-        <item>公園でジョギングをしてみる</item>
-        <item>次に見つけた動物を観察して写真を撮る</item>
-        <item>次に見かけた教会を訪れる</item>
-        <item>ユニークなアートを見つけて写真を撮る</item>
+        <item>Drink coffee at a new cafe</item>
+        <item>Pose with street art</item>
+        <item>Ask a stranger for today\'s recommendation and try it</item>
+        <item>Eat local food</item>
+        <item>Ask the next person you meet about their favorite movie</item>
+        <item>Dance randomly for 10 seconds!</item>
+        <item>Write a letter to yourself and send it to your future self</item>
+        <item>Ask someone "How's your day?"</item>
+        <item>Buy one item from a dollar shop</item>
+        <item>Post a random picture to social media</item>
+        <item>Enter the next bookstore you see and buy a book</item>
+        <item>Order a different ice cream flavor than usual</item>
+        <item>Get lost intentionally</item>
+        <item>Find a "first experience" in Canada</item>
+        <item>Look for Canadian animals and take pictures</item>
+        <item>Wear a quirky hat and walk around the city</item>
+        <item>Watch a street performance</item>
+        <item>Sing your favorite song out loud in public</item>
+        <item>Listen to a new genre of music</item>
+        <item>Sit next to a stranger at a cafe</item>
+        <item>Read a local popular magazine</item>
+        <item>Find your favorite ice cream shop</item>
+        <item>Buy a random product at the supermarket</item>
+        <item>Play with children in the park</item>
+        <item>Pet a dog you meet on the street</item>
+        <item>Use social media to make Canadian friends</item>
+        <item>Go for a walk in a new place</item>
+        <item>Talk to someone at a Canadian bus stop</item>
+        <item>Try a new sport</item>
+        <item>Join an activity club</item>
+        <item>Take photos and enter a photography contest</item>
+        <item>Cook Canadian food with locals</item>
+        <item>Visit the city center and enter a random cafe</item>
+        <item>Observe and take pictures of local flowers</item>
+        <item>Visit famous Canadian coffee chains</item>
+        <item>Bring a handmade gift to someone</item>
+        <item>Try skateboarding or rollerblading</item>
+        <item>Buy a stylish hat at a local fashion shop</item>
+        <item>Recommend a local spot to a foreign tourist</item>
+        <item>Have a conversation in English at a random cafe</item>
+        <item>Find a unique item at a souvenir shop</item>
+        <item>Borrow a book about Canadian history from the library</item>
+        <item>Talk to a street performer</item>
+        <item>Ask for recommended tourist spots near the station</item>
+        <item>Try Canadian beer</item>
+        <item>Read a book at the local library</item>
+        <item>Buy and read a book in English</item>
+        <item>Spend an hour quietly in one place</item>
+        <item>Shop at a local vegetable market</item>
+        <item>Spend the entire day speaking only English with locals</item>
+        <item>Do a short interview with the next person you meet</item>
+        <item>Join a local activity club</item>
+        <item>Enter a random cafe and order a local recommended menu item</item>
+        <item>Go to the beach and make new friends</item>
+        <item>Spend an hour at the next place you pass by</item>
+        <item>Look for rare Canadian plants and take pictures</item>
+        <item>Document the day with photos</item>
+        <item>Relax while listening to your favorite music</item>
+        <item>Try a new fashion style</item>
+        <item>Enter a random cafe and order a new drink</item>
+        <item>Observe an interesting building in the city</item>
+        <item>Ask a local for a cafe recommendation</item>
+        <item>Try a cafe you\'ve never been to before</item>
+        <item>Write a letter to your future self in one year</item>
+        <item>Send a letter to your mother</item>
+        <item>Practice English listening for 30 minutes</item>
+        <item>Learn 10 new English words</item>
+        <item>Use the new words you learned that day</item>
+        <item>Read the local news</item>
+        <item>Learn about Canadian news and topics</item>
+        <item>Read 10 pages of a book</item>
+        <item>Study for an hour at a cafe</item>
+        <item>Do 30 minutes of yoga or stretching</item>
+        <item>Read a book on a park bench</item>
+        <item>Spend the whole day without using your phone</item>
+        <item>Find an interesting sign in the city and take a picture</item>
+        <item>Pick and eat your favorite bread at a bakery</item>
+        <item>Try a famous local soft drink</item>
+        <item>Find a Canadian squirrel and take a picture</item>
+        <item>Buy a T-shirt with the city\'s name on it</item>
+        <item>Ask a random person, "What do you like about Canada?"</item>
+        <item>Ask a local for the best restaurant recommendation</item>
+        <item>Stand still and close your eyes for one minute</item>
+        <item>Ask someone passing by for a local recommendation</item>
+        <item>Talk to someone playing music on the street</item>
+        <item>Find a special item at a shopping mall</item>
+        <item>Relax on a random bench you find</item>
+        <item>Take a sip of local beer</item>
+        <item>Find one famous landmark in the city</item>
+        <item>Order a dessert you\'ve never tried before</item>
+        <item>Get lost on purpose and enjoy the local scenery</item>
+        <item>Walk around the city wearing a new hat</item>
+        <item>Fly a kite on a windy day</item>
+        <item>Talk to someone fishing by the river</item>
+        <item>Ask someone at the bus stop for the next tourist spot</item>
+        <item>Spend time at a local book cafe</item>
+        <item>Listen to the sounds of nature in a wooded area</item>
+        <item>Order a special cake at your favorite cafe</item>
+        <item>Enjoy lunch at a local food market</item>
+        <item>Take a picture at a city landmark</item>
+        <item>Cross the next bridge you find</item>
+        <item>Explore a local handmade market</item>
+        <item>Enjoy people-watching from a bench</item>
+        <item>Relax in a public garden</item>
+        <item>Try a local sport</item>
+        <item>Try a new dish at a random restaurant</item>
+        <item>Ask a local for the next place to visit</item>
+        <item>Try a dish that caught your eye at a food court</item>
+        <item>Take a picture of a uniquely shaped building</item>
+        <item>Attend a random sports event</item>
+        <item>Enjoy breakfast at a local cafe</item>
+        <item>Buy fresh vegetables at a local market</item>
+        <item>Visit a new bakery first thing in the morning</item>
+        <item>Listen to your favorite music while walking outside</item>
+        <item>Find new ingredients at a local farmers\' market</item>
+        <item>Go jogging in the park</item>
+        <item>Observe and take a picture of the next animal you see</item>
+        <item>Visit the next church you come across</item>
+        <item>Find unique art and take a picture</item>
     </string-array>
 
     <string-array name="default_weekend_roulette_items">
-        <item>カナダの名所を一つ巡る</item>
-        <item>ランダムな乗り物に乗って、降りたところで観光する</item>
-        <item>カナダ名物のメープルシロップを使った料理を作る</item>
-        <item>美術館に行く</item>
-        <item>公園でピクニックを楽しむ</item>
-        <item>カナダの有名な橋を渡る</item>
-        <item>友達にカナダのおすすめスポットを聞いて行ってみる</item>
-        <item>散歩しながら現地の人に「おすすめスポット」を尋ねる</item>
-        <item>公園でボールゲームをやっている人に加わる</item>
-        <item>「一番長いカフェタイム」を試みる</item>
-        <item>市内観光バスに乗る</item>
-        <item>地元のお祭りを見に行く</item>
-        <item>映画館で現地の映画を観る</item>
-        <item>博物館で学ぶ</item>
-        <item>公園でサイクリングをする</item>
-        <item>フリーマーケットに行く</item>
-        <item>次に見かけた美術館に立ち寄る</item>
-        <item>日没までに海岸に行ってみる</item>
-        <item>好きな通りを探して歩く</item>
-        <item>サンドイッチを持ってピクニック</item>
-        <item>ビーチで日光浴をする</item>
-        <item>現地の手作りマーケットで買い物する</item>
-        <item>知らない道を歩いて、カナダの新しいスポットを発見する</item>
-        <item>アクアリウムに行って、海の生き物を観察する</item>
-        <item>美術館でアートを鑑賞する</item>
-        <item>次に見かけた山を登ってみる</item>
-        <item>ビーチに行って砂の城を作る</item>
-        <item>隣の町へ日帰り旅行</item>
-        <item>新しいアクティビティに挑戦する</item>
-        <item>近くの山に登って眺めを楽しむ</item>
-        <item>美術館で時間を過ごす</item>
-        <item>地元のスポーツイベントに参加する</item>
-        <item>おしゃれなカフェで一日過ごす</item>
-        <item>近くのスパやリラクゼーション施設でリフレッシュ</item>
-        <item>カナダのビーチで遊ぶ</item>
-        <item>カナダの名所を一つ巡る</item>
-        <item>一日中新しい場所を探しながら歩く</item>
-        <item>街で見つけたアートにポーズを取る</item>
-        <item>カナダのストリートアートやオブジェを背景に写真を撮ろう</item>
-        <item>カナダの動物を観察する</item>
-        <item>次に見かけた観光スポットを巡る</item>
-        <item>1日歩数計1万歩達成！</item>
-        <item>コミュニティイベントやワークショップに行って、地元の人たちと交流。</item>
-        <item>履歴書や自己PRの準備</item>
-        <item>博物館やオンラインで、カナダの過去や文化に触れてみる。</item>
-        <item>次に見つけた観光名所の前で一人旅の写真を撮る</item>
-        <item>レインコートを着て雨の日に散歩する</item>
-        <item>フードトラックで食べ物を買う</item>
-        <item>地下鉄の駅を3つ飛ばして、降りた場所を探検する</item>
-        <item>現地の音楽フェスティバルを探して参加する</item>
-        <item>川沿いを歩いてみる</item>
-        <item>湖に行って波の音を聞く</item>
-        <item>日没を見に行く</item>
-        <item>スケッチブックを持って外で絵を描く</item>
-        <item>カナダで有名な橋を歩いて渡る</item>
-        <item>カナダの伝統料理を調べて挑戦する</item>
-        <item>市内の路地を探検する</item>
-        <item>カナダの動物園を探して訪問する</item>
-        <item>海辺でピクニックを楽しむ</item>
-        <item>カナダの有名な湖を探して訪れる</item>
-        <item>カナダの森林でハイキングを楽しむ</item>
-        <item>近くの公園でランニングをしてみる</item>
-        <item>アウトドアマーケットで地元の食べ物を買う</item>
-        <item>次に見かけた博物館に入る</item>
-        <item>街中で自転車を借りて乗る</item>
-        <item>カナダの伝統的なダンスを習う</item>
-        <item>現地のアートイベントに参加する</item>
-        <item>地元の動物園で野生動物を見る</item>
-        <item>おしゃれなカフェで1日仕事をする</item>
-        <item>カナダの森林でハイキングを楽しむ</item>
-        <item>カナダの自然公園を探して日帰り旅行する</item>
-        <item>初めての観光バスに乗る</item>
-        <item>自転車で街中を探索する</item>
-        <item>キャンプ場を探してキャンプ体験をする</item>
-        <item>現地のガイドツアーに参加して新しい発見をする</item>
-        <item>街で最も高いビルに登って景色を楽しむ</item>
-        <item>地元の祭りを探して参加する</item>
-        <item>山の頂上で景色を楽しむ</item>
-        <item>地元のガーデンパーティに参加して交流する</item>
-        <item>近くの湖でボートに乗る</item>
-        <item>日が沈むまでビーチでのんびりする</item>
-        <item>スケッチブックを持って街でお気に入りの景色を描く</item>
-        <item>次に見つけた公園でピクニックする</item>
-        <item>地元の音楽イベントに参加する</item>
-        <item>カナダの文化を学ぶためのクラスを取る</item>
-        <item>地元のガイドと一緒に街を探索する</item>
-        <item>初めてのボルダリングに挑戦する</item>
-        <item>街のランドマークを一つずつ巡るツアーを作る</item>
-        <item>近くの森でハイキングを楽しむ</item>
-        <item>地元の美術ギャラリーを巡る</item>
-        <item>カナダの自然をテーマにした映画を観る</item>
-        <item>1日中、観光名所を巡る</item>
-        <item>街の動物園でレアな動物を見る</item>
-        <item>現地のバンドのライブを楽しむ</item>
-        <item>ローカルの食べ物コンテストに参加する</item>
-        <item>地元のアウトドアイベントに参加する</item>
-        <item>近くの川でカヤックを楽しむ</item>
-        <item>新しい趣味に挑戦してみる</item>
-        <item>目的地を決めずに、ランダムにバスや電車に乗り、降りたところで一日を楽しむ</item>
+        <item>Visit a famous Canadian landmark</item>
+        <item>Take a random ride and explore the area where you get off</item>
+        <item>Cook a dish using Canadian maple syrup</item>
+        <item>Visit an art museum</item>
+        <item>Enjoy a picnic in the park</item>
+        <item>Cross a famous Canadian bridge</item>
+        <item>Ask a friend for a recommended spot in Canada and visit it</item>
+        <item>Ask a local for recommended spots while walking</item>
+        <item>Join a ball game in the park</item>
+        <item>Attempt the "longest cafe time"</item>
+        <item>Take a city sightseeing bus</item>
+        <item>Visit a local festival</item>
+        <item>Watch a local movie at the cinema</item>
+        <item>Learn at a museum</item>
+        <item>Go cycling in the park</item>
+        <item>Visit a flea market</item>
+        <item>Stop by the next art museum you see</item>
+        <item>Go to the beach before sunset</item>
+        <item>Find and walk down your favorite street</item>
+        <item>Have a picnic with a sandwich</item>
+        <item>Sunbathe at the beach</item>
+        <item>Shop at a local handmade market</item>
+        <item>Walk down an unfamiliar road and discover a new spot in Canada</item>
+        <item>Visit an aquarium and observe sea creatures</item>
+        <item>Appreciate art at an art museum</item>
+        <item>Climb the next mountain you see</item>
+        <item>Go to the beach and build a sandcastle</item>
+        <item>Take a day trip to a nearby town</item>
+        <item>Try a new activity</item>
+        <item>Climb a nearby mountain and enjoy the view</item>
+        <item>Spend time at an art museum</item>
+        <item>Participate in a local sports event</item>
+        <item>Spend a day at a stylish cafe</item>
+        <item>Refresh yourself at a nearby spa or relaxation facility</item>
+        <item>Play at a Canadian beach</item>
+        <item>Visit a famous Canadian landmark</item>
+        <item>Spend the day walking around, looking for new places</item>
+        <item>Pose with art you find in the city</item>
+        <item>Take a picture with Canadian street art or sculptures in the background</item>
+        <item>Observe Canadian animals</item>
+        <item>Visit the next tourist spot you come across</item>
+        <item>Achieve 10,000 steps in one day!</item>
+        <item>Attend a community event or workshop and interact with locals</item>
+        <item>Prepare your resume and self-promotion materials</item>
+        <item>Learn about Canada’s history and culture through museums or online</item>
+        <item>Take a solo travel photo in front of the next tourist attraction you find</item>
+        <item>Walk in the rain wearing a raincoat</item>
+        <item>Buy food from a food truck</item>
+        <item>Skip three subway stations and explore the area where you get off</item>
+        <item>Find and attend a local music festival</item>
+        <item>Take a walk along the river</item>
+        <item>Go to a lake and listen to the sound of the waves</item>
+        <item>Watch the sunset</item>
+        <item>Bring a sketchbook and draw outdoors</item>
+        <item>Walk across a famous Canadian bridge</item>
+        <item>Research and try cooking a traditional Canadian dish</item>
+        <item>Explore alleyways in the city</item>
+        <item>Find and visit a Canadian zoo</item>
+        <item>Enjoy a picnic by the seaside</item>
+        <item>Find and visit a famous Canadian lake</item>
+        <item>Enjoy hiking in a Canadian forest</item>
+        <item>Try running in a nearby park</item>
+        <item>Buy local food at an outdoor market</item>
+        <item>Visit the next museum you see</item>
+        <item>Rent a bike and ride around the city</item>
+        <item>Learn a traditional Canadian dance</item>
+        <item>Participate in a local art event</item>
+        <item>See wildlife at the local zoo</item>
+        <item>Work for a day at a stylish cafe</item>
+        <item>Enjoy hiking in a Canadian forest</item>
+        <item>Find and take a day trip to a Canadian nature park</item>
+        <item>Take your first tourist bus ride</item>
+        <item>Explore the city by bike</item>
+        <item>Find a campsite and go camping</item>
+        <item>Join a local guided tour and make new discoveries</item>
+        <item>Climb the tallest building in the city and enjoy the view</item>
+        <item>Find and participate in a local festival</item>
+        <item>Enjoy the view from the top of a mountain</item>
+        <item>Join a local garden party and meet new people</item>
+        <item>Go boating on a nearby lake</item>
+        <item>Relax on the beach until the sun sets</item>
+        <item>Bring a sketchbook and draw your favorite city view</item>
+        <item>Have a picnic at the next park you find</item>
+        <item>Attend a local music event</item>
+        <item>Take a class to learn about Canadian culture</item>
+        <item>Explore the city with a local guide</item>
+        <item>Try bouldering for the first time</item>
+        <item>Create a tour to visit city landmarks one by one</item>
+        <item>Enjoy hiking in a nearby forest</item>
+        <item>Visit local art galleries</item>
+        <item>Watch a movie themed around Canadian nature</item>
+        <item>Spend the day visiting tourist attractions</item>
+        <item>See rare animals at the city zoo</item>
+        <item>Enjoy a live performance by a local band</item>
+        <item>Participate in a local food contest</item>
+        <item>Join a local outdoor event</item>
+        <item>Enjoy kayaking on a nearby river</item>
+        <item>Try a new hobby</item>
+        <item>Take a random bus or train ride without a set destination, and enjoy the day where you get off</item>
     </string-array>
 </resources>
 
