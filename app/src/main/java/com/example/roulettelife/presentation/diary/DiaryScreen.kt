@@ -30,8 +30,8 @@ import com.example.roulettelife.data.local.RoulettePreferences
 
 @Composable
 fun DiaryScreen(
-    photoUri: String,  // 渡された写真のURI
-    diaryEntry: String,  // 渡された日記内容
+    photoUri: String,
+    diaryEntry: String,
     context: Context,
     onRouletteButtonClick: () -> Unit,
 ) {
@@ -39,9 +39,8 @@ fun DiaryScreen(
     val diaryPreferences = DiaryPreferences(context)
     val roulettePreferences = RoulettePreferences(context)
     var diaryText by remember { mutableStateOf(diaryEntry) }
-    var showDeleteDialog by remember { mutableStateOf(false) } // 削除確認ダイアログの表示フラグ
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
-    // LazyColumnでスクロール可能にする
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +48,6 @@ fun DiaryScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 写真の表示
         item {
             if (uri != null) {
                 AsyncImage(
@@ -63,7 +61,6 @@ fun DiaryScreen(
             }
         }
 
-        // 日記内容の表示
         item {
             Text(
                 text = diaryEntry,
@@ -72,7 +69,6 @@ fun DiaryScreen(
             )
         }
 
-        // 日記を書けるエリア (編集可能なTextField)
         item {
             TextField(
                 value = diaryText,
@@ -84,53 +80,48 @@ fun DiaryScreen(
             )
         }
 
-        // Saveボタン
         item {
             Button(onClick = {
                 // DiaryPreferencesを使用して日記をSharedPreferencesに保存
                 diaryPreferences.saveDiary(photoUri, diaryText)
-
-                // 削除確認ダイアログを表示
                 showDeleteDialog = true
             }) {
                 Text(text = "Save")
             }
         }
+    }
 
-        // 削除確認ダイアログ
-        if (showDeleteDialog) {
-            item {
-                AlertDialog(
-                    onDismissRequest = { showDeleteDialog = false },
-                    title = { Text(stringResource(id = R.string.delete_item)) },
-                    text = { Text("Delete $diaryEntry ？") },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                // 削除処理: SharedPreferences または defaultItems から削除
-                                if (diaryEntry in context.resources.getStringArray(R.array.default_weed_day_roulette_items)) {
-                                    roulettePreferences.saveDeletedDefaultItem(diaryEntry)
-                                } else {
-                                    roulettePreferences.removeWeekdayRouletteItem(diaryEntry)
-                                }
-                                showDeleteDialog = false
-                                // ルーレット画面に遷移
-                                onRouletteButtonClick()
-                            }
-                        ) {
-                            Text(stringResource(id = R.string.delete))
+    // 削除確認ダイアログ
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(stringResource(id = R.string.delete_item)) },
+            text = { Text("Delete $diaryEntry ？") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // 削除処理
+                        if (diaryEntry in context.resources.getStringArray(R.array.default_weed_day_roulette_items)) {
+                            roulettePreferences.saveDeletedDefaultItem(diaryEntry)
+                        } else {
+                            roulettePreferences.removeWeekdayRouletteItem(diaryEntry)
                         }
-                    },
-                    dismissButton = {
-                        Button(onClick = {
-                            showDeleteDialog = false
-                            onRouletteButtonClick()
-                        }) {
-                            Text(stringResource(id = R.string.keep))
-                        }
+                        showDeleteDialog = false
+                        // ルーレット画面に遷移
+                        onRouletteButtonClick()
                     }
-                )
+                ) {
+                    Text(stringResource(id = R.string.delete))
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    showDeleteDialog = false
+                    onRouletteButtonClick()
+                }) {
+                    Text(stringResource(id = R.string.keep))
+                }
             }
-        }
+        )
     }
 }

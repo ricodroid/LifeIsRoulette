@@ -14,7 +14,7 @@
 
     <!--  DiaryScreen  -->
     <string name="enter_diary">日記を入力してください</string>
-    <string name="delete_item">この項目を削除しますか？</string>
+    <string name="delete_item">このルーレットの項目を削除しますか？</string>
     <string name="delete">削除</string>
     <string name="keep">残す</string>
 
