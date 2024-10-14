@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
 import com.example.roulettelife.data.local.LocaleUtils
@@ -124,9 +125,9 @@ fun RouletteWeekdayScreen(
 
     // メニューの状態を保持
     var expanded by remember { mutableStateOf(false) }
-    // Custom rounded font
+
     val poppinsFontFamily = FontFamily(
-        Font(R.font.poppins_regular, FontWeight.Normal)
+        Font(R.font.roboto_conde, FontWeight.Normal)
     )
 
     Scaffold(
@@ -199,7 +200,11 @@ fun RouletteWeekdayScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = selectedOption, modifier = Modifier.padding(18.dp))
+                Text(text = selectedOption,
+                    fontFamily = poppinsFontFamily,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(18.dp)
+                )
 
                 Box(
                     contentAlignment = Alignment.Center,
