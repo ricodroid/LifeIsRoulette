@@ -7,10 +7,14 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +27,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -321,9 +327,43 @@ fun RouletteWeekendScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(onClick = { onDiaryButtonClick() }) {
-                    Text(text = "Diary")
+                Card(
+                    onClick = { onDiaryButtonClick() }, // ここでCard自体をクリック可能に
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(80.dp)
+                        .padding(8.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFF1F3F4)), // カードの背景色を指定
+                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // アイコンを追加
+                        Icon(
+                            imageVector = Icons.Default.Favorite, // 好きなアイコンに変更可能
+                            contentDescription = null,
+                            tint = Color(0xFF6D6D6D), // アイコンの色
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                        )
+                        // テキストを追加
+                        Text(
+                            text = "Diary",
+                            color = Color(0xFF6D6D6D), // テキストの色
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
+
+
             }
         }
     )
