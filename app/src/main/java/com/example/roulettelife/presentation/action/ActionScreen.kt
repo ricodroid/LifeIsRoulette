@@ -35,6 +35,12 @@ import com.example.roulettelife.presentation.Screens
 import java.text.SimpleDateFormat
 import java.util.*
 
+// ハイライトを一番上にする。
+// Doneは二番目
+// その次に日付
+// 今日のハイライトは削除する
+// Listもインスタのように写真メインにする
+
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun ActionScreen(
@@ -105,6 +111,17 @@ fun ActionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = selectedItem,
+            fontSize = 26.sp,
+            fontStyle = FontStyle.Italic,
+            fontFamily = poppinsFontFamily,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFED1A3D),
+            modifier = Modifier.padding(bottom = 24.dp),
+            textAlign = TextAlign.Center  // テキストを中央寄せに設定
+        )
+
         // 日付表示（モダンなフォントと色）
         Text(
             text = context.getString(R.string.today_item, currentDate),
@@ -128,25 +145,15 @@ fun ActionScreen(
         )
 
         // 選択された項目の表示
-        Text(
-            text = stringResource(id = R.string.highlight),
-            fontSize = 22.sp,
-            fontStyle = FontStyle.Italic,
-            fontFamily = poppinsFontFamily,
-            color = Color(0xFF333333),
-            modifier = Modifier.padding(bottom = 12.dp),
-            textAlign = TextAlign.Center  // テキストを中央寄せに設定
-        )
-
-        Text(
-            text = selectedItem,
-            fontSize = 26.sp,
-            fontStyle = FontStyle.Italic,
-            fontFamily = poppinsFontFamily,
-            color = Color(0xFFED1A3D),
-            modifier = Modifier.padding(bottom = 24.dp),
-            textAlign = TextAlign.Center  // テキストを中央寄せに設定
-        )
+//        Text(
+//            text = stringResource(id = R.string.highlight),
+//            fontSize = 22.sp,
+//            fontStyle = FontStyle.Italic,
+//            fontFamily = poppinsFontFamily,
+//            color = Color(0xFF333333),
+//            modifier = Modifier.padding(bottom = 12.dp),
+//            textAlign = TextAlign.Center  // テキストを中央寄せに設定
+//        )
 
         PulsatingRainbowButton(
             onClick = {
