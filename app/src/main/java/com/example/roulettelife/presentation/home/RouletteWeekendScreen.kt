@@ -283,8 +283,7 @@ fun RouletteWeekendScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // ボタンをクリックしてルーレットを回転
-                Button(
+                Card(
                     onClick = {
                         if (!isSpinning) {
                             isSpinning = true
@@ -307,32 +306,88 @@ fun RouletteWeekendScreen(
                                 navController.navigate("${Screens.ACTION.route}/$selectedOption")
                             }
                         }
-                    },
-                    enabled = !isSpinning,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE57373)),
+                    }, // ここでCard自体をクリック可能に
                     modifier = Modifier
-                        .width(210.dp)
-                        .height(100.dp)
-                        .padding(16.dp)
+                        .width(200.dp)
+                        .height(65.dp)
+                        .padding(2.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFE57373)), // カードの背景色を指定
+                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
                 ) {
-                    Text(text = if (isSpinning) "Spinning..." else "Spin")
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // アイコンを追加
+                        Icon(
+                            imageVector = Icons.Default.Favorite, // 好きなアイコンに変更可能
+                            contentDescription = null,
+                            tint = Color(0xFFE57373), // アイコンの色
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                        )
+                        // テキストを追加
+                        Text(
+                            text = if (isSpinning) "Spinning..." else "Spin",
+                            color = Color(0xFF6D6D6D), // テキストの色
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ルーレットを平日用にするボタン
-                Button(onClick = { onChangeRouletteButtonClick() }) {
-                    Text(text = "Change Weekday")
+                Card(
+                    onClick = { onChangeRouletteButtonClick() }, // ここでCard自体をクリック可能に
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(65.dp)
+                        .padding(2.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFF1F3F4)), // カードの背景色を指定
+                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // アイコンを追加
+                        Icon(
+                            imageVector = Icons.Default.Favorite, // 好きなアイコンに変更可能
+                            contentDescription = null,
+                            tint = Color(0xFF6D6D6D), // アイコンの色
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                        )
+                        // テキストを追加
+                        Text(
+                            text = "Change Weekday",
+                            color = Color(0xFF6D6D6D), // テキストの色
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Card(
                     onClick = { onDiaryButtonClick() }, // ここでCard自体をクリック可能に
                     modifier = Modifier
                         .width(200.dp)
-                        .height(80.dp)
-                        .padding(8.dp)
+                        .height(66.dp)
+                        .padding(2.dp)
                         .shadow(8.dp, shape = RoundedCornerShape(16.dp))
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color(0xFFF1F3F4)), // カードの背景色を指定
@@ -362,8 +417,6 @@ fun RouletteWeekendScreen(
                         )
                     }
                 }
-
-
             }
         }
     )
