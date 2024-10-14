@@ -117,6 +117,10 @@ fun RouletteWeekendScreen(
         )
     }
 
+    // ランダムな色のリストを作成
+    val shuffledColors = remember {
+        colors.shuffled().take(10)  // colors をシャッフルして10色を選択
+    }
 
     // メニューの状態を保持
     var expanded by remember { mutableStateOf(false) }
@@ -217,7 +221,7 @@ fun RouletteWeekendScreen(
                         rotate(rotation) {
                             for (i in options.indices) {
                                 drawArc(
-                                    color = colors[i],
+                                    color = shuffledColors[i],
                                     startAngle = i * sliceAngle,
                                     sweepAngle = sliceAngle,
                                     useCenter = true
