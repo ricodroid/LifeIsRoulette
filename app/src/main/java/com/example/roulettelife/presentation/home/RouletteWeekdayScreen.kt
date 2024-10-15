@@ -4,6 +4,10 @@ package com.example.roulettelife.presentation.home
 import android.app.Activity
 import android.content.Context
 import android.text.TextPaint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -203,11 +207,18 @@ fun RouletteWeekdayScreen(
                     TopAppBar(
                         modifier = Modifier.shadow(8.dp), // 影を追加
                         title = {
-                            Text(
-                                text = "Weekday Roulette",
-                                fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
-                                color = Color(0xFF6699CC)
-                            )
+                            // AnimatedVisibilityを使ってフェードイン・フェードアウトを実装
+                            AnimatedVisibility(
+                                visible = !drawerState.isOpen,  // メニューが開いていない時に表示
+                                enter = fadeIn(animationSpec = tween(durationMillis = 2000)),  // フェードインを2秒に設定
+                                exit = fadeOut(animationSpec = tween(durationMillis = 1500))   // フェードアウトも2秒に設定
+                            )  {
+                                Text(
+                                    text = "Weekend Roulette",
+                                    fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
+                                    color = Color(0xFF6699CC)
+                                )
+                            }
                         },
                         actions = {
                             IconButton(onClick = {
@@ -248,7 +259,7 @@ fun RouletteWeekdayScreen(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .size(300.dp)
-                                .background(Color.White, shape = CircleShape)
+                                .background(Color.White.copy(alpha = 0.5f), shape = CircleShape)
                                 .clickable(enabled = !isSpinning) {
                                     if (!isSpinning) {
                                         isSpinning = true
