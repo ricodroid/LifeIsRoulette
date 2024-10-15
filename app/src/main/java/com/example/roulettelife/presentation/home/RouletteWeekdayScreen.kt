@@ -1,21 +1,20 @@
 package com.example.roulettelife.presentation.home
 
+
 import android.app.Activity
-import android.os.Build
+import android.content.Context
 import android.text.TextPaint
-import androidx.annotation.RequiresApi
-import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.ModalDrawer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
@@ -23,14 +22,18 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -51,15 +55,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
-import com.example.roulettelife.data.local.LocaleUtils
+import com.example.roulettelife.data.local.LocaleUtils.setLocale
 import com.example.roulettelife.data.local.RoulettePreferences
 import com.example.roulettelife.presentation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.Locale
 import kotlin.random.Random
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouletteWeekdayScreen(
@@ -70,12 +74,15 @@ fun RouletteWeekdayScreen(
 ) {
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
 
     // XML から defaultItems を取得
     val defaultItems = remember { context.resources.getStringArray(R.array.default_weed_day_roulette_items).toMutableList() }
+    // 現在の言語を取得
     var currentLanguage by remember { mutableStateOf(roulettePreferences.getLanguage()) }
 
-    // SharedPreferences からユーザーが追加した項目と削除されたデフォルトアイテムを取得
+    // SharedPreferences から削除されたデフォルトアイテムとユーザーが追加した項目を取得
     val deletedDefaultItems = remember { roulettePreferences.getDeletedDefaultItems() }
     var allOptions = remember {
         mutableStateOf(
@@ -139,290 +146,297 @@ fun RouletteWeekdayScreen(
     }
 
     // メニューの状態を保持
-    var expanded by remember { mutableStateOf(false) }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val poppinsFontFamily = FontFamily(
-        Font(R.font.roboto_conde, FontWeight.Normal)
-    )
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.shadow(8.dp), // 影を追加
-                title = {
-                    Text(
-                        text = "Weekday Roulette",
-                        fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
-                        color = Color.Blue
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { expanded = true }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Settings") },
-                            onClick = {
-                                expanded = false
-                                onSettingButtonClick()
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Diary") },
-                            onClick = {
-                                expanded = false
-                                navController.navigate(Screens.DIARY_LIST.route)
-                            }
-                        )
-                        // 言語変更オプション
-                        DropdownMenuItem(
-                            text = { Text("English") },
-                            onClick = {
-                                LocaleUtils.setLocale(context, "en")
-                                roulettePreferences.saveLanguage("en")
-                                currentLanguage = "en"
-                                (context as? Activity)?.recreate()  // アクティビティを再起動
-                                expanded = false
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("日本語") },
-                            onClick = {
-                                LocaleUtils.setLocale(context, "ja")
-                                roulettePreferences.saveLanguage("ja")
-                                currentLanguage = "ja"
-                                (context as? Activity)?.recreate()  // アクティビティを再起動
-                                expanded = false
-                            }
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0xFFF1F3F4)
-                )
-            )
-        },
-        content = { padding ->
+    // メニューのスライドコンポーネントを追加
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color(0xFFF1F3F4))
-                    .padding(padding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxHeight()
+                    .width(screenWidth / 2)
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0.3f),  // 上部をより透明に
+                                Color.White.copy(alpha = 0.6f)   // 下部をやや濃く
+                            )
+                        )
+                    )  // 半透明のすりガラス風背景
+                    .padding(16.dp)
             ) {
-                Text(text = selectedOption,
-                    fontFamily = poppinsFontFamily,
+                Text(
+                    text = "Menu",
+//                    fontFamily = FontFamily(Font(R.font.poppins_bold, FontWeight.Bold)),
                     fontSize = 24.sp,
-                    modifier = Modifier.padding(6.dp)
+                    color = Color.Gray
                 )
+                Divider(modifier = Modifier.padding(vertical = 12.dp))
 
-                RouletteSpinCalendarScreen()
+                // 設定ボタン
+                DrawerItem(text = "Settings", onClick = onSettingButtonClick)
 
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(300.dp)
-                        .background(Color.White, shape = CircleShape)
-                        .clickable(enabled = !isSpinning) {
-                            if (!isSpinning) {
-                                isSpinning = true
-                                selectedOption = ""
-                                coroutineScope.launch {
-                                    for (i in 1..20) {
-                                        rotation += Random.nextFloat() * 360
-                                        delay(100)
-                                    }
-                                    isSpinning = false
+                // 日記ボタン
+                DrawerItem(text = "Diary", onClick = onDiaryButtonClick)
 
-                                    val finalRotation = (rotation % 360f)
-                                    val sliceAngle = 360f / options.size
+                // 言語変更オプション
+                DrawerItem(text = "English", onClick = {
+                    setLocale(context, "en")
+                    roulettePreferences.saveLanguage("en")
+                    currentLanguage = "en"
+                    (context as? Activity)?.recreate()
+                })
 
-                                    val selectedIndex =
-                                        ((360f - finalRotation) / sliceAngle).toInt() % options.size
-
-                                    selectedOption = options[selectedIndex]
-
-                                    delay(3000)
-                                    navController.navigate("${Screens.ACTION.route}/$selectedOption")
-                                    roulettePreferences.saveRouletteSpinDate(LocalDate.now())
-                                }
-                            }
-                        }
-                ) {
-                    // ルーレットの描画
-                    // ルーレットのデザイン変更
-                    Canvas(modifier = Modifier.size(250.dp)) {
-                        val sliceAngle = 360f / options.size
-                        val radius = size.minDimension / 2
-
-                        val textPaint = TextPaint().apply {
-                            color = android.graphics.Color.BLACK
-                            textSize = 30f
-                            textAlign = android.graphics.Paint.Align.CENTER
-                        }
-
-                        // 影を追加する
-                        val shadowOffset = 10f
-                        val shadowColor = Color(0xFFAAAAAA)
-
-                        // 影の円を描く（少し外側）
-                        drawCircle(
-                            color = shadowColor,
-                            radius = radius,
-                            center = Offset(size.center.x + shadowOffset, size.center.y + shadowOffset),
-                            alpha = 0.5f
-                        )
-
-                        // ルーレットを描く
-                        rotate(rotation) {
-                            for (i in options.indices) {
-                                // グラデーションを追加
-                                val gradientShader = Brush.sweepGradient(
-                                    colors = listOf(
-                                        shuffledColors[i].copy(alpha = 1f),
-                                        shuffledColors[i].copy(alpha = 0.8f)
-                                    )
-                                )
-
-                                // グラデーションでアークを描く
-                                drawArc(
-                                    brush = gradientShader,
-                                    startAngle = i * sliceAngle,
-                                    sweepAngle = sliceAngle,
-                                    useCenter = true
-                                )
-
-                                // 表示するテキストを制限（長すぎる場合はカットして"..."を追加）
-                                val displayText = if (options[i].length > 10) {
-                                    options[i].take(5) + "..."
-                                } else {
-                                    options[i]
-                                }
-
-                                val textAngle = i * sliceAngle + sliceAngle / 2
-                                val textRadius = radius * 0.6f
-
-                                val x = size.center.x + textRadius * kotlin.math.cos(
-                                    Math.toRadians(textAngle.toDouble())
-                                ).toFloat()
-                                val y = size.center.y + textRadius * kotlin.math.sin(
-                                    Math.toRadians(textAngle.toDouble())
-                                ).toFloat()
-
-                                // テキストを描画
-                                drawContext.canvas.nativeCanvas.drawText(
-                                    displayText,
-                                    x,
-                                    y,
-                                    textPaint
-                                )
-                            }
-                        }
-                    }
-
-                    // ポインターを描画
-                    Canvas(modifier = Modifier
-                        .size(320.dp)
-                        .offset(x = 0.dp, y = 0.dp)
-                    ) {
-                        val pointerPath = Path().apply {
-                            moveTo(size.width, size.height / 2 - 30)
-                            lineTo(size.width, size.height / 2 + 30)
-                            lineTo(size.width - 90, size.height / 2)
-                            close()
-                        }
-                        drawPath(pointerPath, Color.Red)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // ルーレットを平日用にするボタン
-                Card(
-                    onClick = { onChangeRouletteButtonClick() }, // ここでCard自体をクリック可能に
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(65.dp)
-                        .padding(2.dp)
-                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .clip(RoundedCornerShape(16.dp)),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
-                    ),
-
-                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // アイコンを追加
-                        Icon(
-                            imageVector = Icons.Default.Refresh, // 好きなアイコンに変更可能
-                            contentDescription = null,
-                            tint = Color(0xFF007DC5), // アイコンの色
-                            modifier = Modifier
-                                .size(40.dp)
-                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
-                        )
-                        // テキストを追加
-                        Text(
-                            text = "Change Weekday",
-                            color = Color(0xFF6D6D6D), // テキストの色
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Card(
-                    onClick = { onDiaryButtonClick() }, // ここでCard自体をクリック可能に
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(66.dp)
-                        .padding(2.dp)
-                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .clip(RoundedCornerShape(16.dp)),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
-                    ),
-                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // アイコンを追加
-                        Icon(
-                            imageVector = Icons.Default.DateRange, // 好きなアイコンに変更可能
-                            contentDescription = null,
-                            tint = Color(0xFFD93A49), // アイコンの色
-                            modifier = Modifier
-                                .size(40.dp)
-                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
-                        )
-                        // テキストを追加
-                        Text(
-                            text = "Diary",
-                            color = Color(0xFF6D6D6D), // テキストの色
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
+                DrawerItem(text = "日本語", onClick = {
+                    setLocale(context, "ja")
+                    roulettePreferences.saveLanguage("ja")
+                    currentLanguage = "ja"
+                    (context as? Activity)?.recreate()
+                })
             }
+        },
+        content = {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        modifier = Modifier.shadow(8.dp), // 影を追加
+                        title = {
+                            Text(
+                                text = "Weekday Roulette",
+                                fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
+                                color = Color(0xFF6699CC)
+                            )
+                        },
+                        actions = {
+                            IconButton(onClick = {
+                                coroutineScope.launch {
+                                    drawerState.open()  // メニューを開く
+                                }
+                            }) {
+                                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                            }
+                        },
+                        colors = TopAppBarDefaults.mediumTopAppBarColors(
+                            containerColor = Color(0xFFF1F3F4)
+                        )
+                    )
+                },
+                content = { padding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFFF1F3F4))
+                            .padding(padding)
+                            .padding(13.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        RouletteSpinCalendarScreen()
+
+                        Text(
+                            text = selectedOption,
+                            fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
+                            fontSize = 24.sp,
+                            modifier = Modifier.padding(6.dp)
+                        )
+
+                        // ルーレット回転のコンテンツ
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(300.dp)
+                                .background(Color.White, shape = CircleShape)
+                                .clickable(enabled = !isSpinning) {
+                                    if (!isSpinning) {
+                                        isSpinning = true
+                                        selectedOption = ""
+                                        coroutineScope.launch {
+                                            for (i in 1..20) {
+                                                rotation += Random.nextFloat() * 360
+                                                delay(100)
+                                            }
+                                            isSpinning = false
+
+                                            val finalRotation = (rotation % 360f)
+                                            val sliceAngle = 360f / options.size
+
+                                            val selectedIndex =
+                                                ((360f - finalRotation) / sliceAngle).toInt() % options.size
+
+                                            selectedOption = options[selectedIndex]
+
+                                            delay(3000)
+                                            navController.navigate("${Screens.ACTION.route}/$selectedOption")
+                                            roulettePreferences.saveRouletteSpinDate(LocalDate.now())
+                                        }
+                                    }
+                                }
+                        ) {
+                            // ルーレットの描画
+                            Canvas(modifier = Modifier.size(250.dp)) {
+                                val sliceAngle = 360f / options.size
+                                val radius = size.minDimension / 2
+
+                                val textPaint = TextPaint().apply {
+                                    color = android.graphics.Color.BLACK
+                                    textSize = 30f
+                                    textAlign = android.graphics.Paint.Align.CENTER
+                                }
+
+                                // 影を追加する
+                                val shadowOffset = 10f // 影のオフセット
+                                val shadowColor = Color(0xFFAAAAAA) // 影の色
+
+                                // 影の円を描く（少し外側）
+                                drawCircle(
+                                    color = shadowColor,
+                                    radius = radius,
+                                    center = Offset(size.center.x + shadowOffset, size.center.y + shadowOffset),
+                                    alpha = 0.5f // 影の透明度を調整
+                                )
+
+                                // ルーレットを描く
+                                rotate(rotation) {
+                                    for (i in options.indices) {
+                                        drawArc(
+                                            color = shuffledColors[i],
+                                            startAngle = i * sliceAngle,
+                                            sweepAngle = sliceAngle,
+                                            useCenter = true
+                                        )
+
+                                        // 表示するテキストを制限（長すぎる場合はカットして"..."を追加）
+                                        val displayText = if (options[i].length > 10) {
+                                            options[i].take(5) + "..."
+                                        } else {
+                                            options[i]
+                                        }
+
+                                        val textAngle = i * sliceAngle + sliceAngle / 2
+                                        val textRadius = radius * 0.6f
+
+                                        val x = size.center.x + textRadius * kotlin.math.cos(
+                                            Math.toRadians(textAngle.toDouble())
+                                        ).toFloat()
+                                        val y = size.center.y + textRadius * kotlin.math.sin(
+                                            Math.toRadians(textAngle.toDouble())
+                                        ).toFloat()
+
+                                        // テキストを描画
+                                        drawContext.canvas.nativeCanvas.drawText(
+                                            displayText,
+                                            x,
+                                            y,
+                                            textPaint
+                                        )
+                                    }
+                                }
+                            }
+
+                            // ポインターを描画
+                            Canvas(modifier = Modifier
+                                .size(320.dp)
+                                .offset(x = 0.dp, y = 0.dp) // オフセットをリセット
+                            ) {
+                                val pointerPath = Path().apply {
+                                    // ポインターをルーレットの右中央（3時の方向）に配置
+                                    moveTo(size.width, size.height / 2 - 30)  // 右中央の頂点
+                                    lineTo(size.width, size.height / 2 + 30)  // 右中央の反対側頂点
+                                    lineTo(size.width - 90, size.height / 2)  // ポインターの先端（中央寄り）
+                                    close()  // 三角形を閉じる
+                                }
+                                drawPath(pointerPath, Color.Red)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // ルーレットを平日用にするボタン
+                        Card(
+                            onClick = { onChangeRouletteButtonClick() }, // ここでCard自体をクリック可能に
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(65.dp)
+                                .padding(2.dp)
+                                .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                                .clip(RoundedCornerShape(16.dp)),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                            ),
+                            elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // アイコンを追加
+                                Icon(
+                                    imageVector = Icons.Default.Refresh, // 好きなアイコンに変更可能
+                                    contentDescription = null,
+                                    tint = Color(0xFF007DC5), // アイコンの色
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                                )
+                                // テキストを追加
+                                Text(
+                                    text = "Change Weekend",
+                                    color = Color(0xFF6D6D6D), // テキストの色
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Card(
+                            onClick = { onDiaryButtonClick() }, // ここでCard自体をクリック可能に
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(66.dp)
+                                .padding(2.dp)
+                                .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                                .clip(RoundedCornerShape(16.dp)),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                            ),
+                            elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // アイコンを追加
+                                Icon(
+                                    imageVector = Icons.Default.DateRange, // 好きなアイコンに変更可能
+                                    contentDescription = null,
+                                    tint = Color(0xFFD93A49), // アイコンの色
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                                )
+                                // テキストを追加
+                                Text(
+                                    text = "Diary",
+                                    color = Color(0xFF6D6D6D), // テキストの色
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            )
         }
     )
 }
