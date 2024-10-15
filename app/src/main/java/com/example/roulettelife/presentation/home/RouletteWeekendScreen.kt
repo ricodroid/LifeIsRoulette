@@ -5,6 +5,7 @@ import android.content.Context
 import android.text.TextPaint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,6 +48,7 @@ import com.example.roulettelife.data.local.RoulettePreferences
 import com.example.roulettelife.presentation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Locale
 import kotlin.random.Random
 
@@ -212,11 +214,37 @@ fun RouletteWeekendScreen(
                     modifier = Modifier.padding(18.dp)
                 )
 
+                RouletteSpinCalendarScreen()
+
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .size(300.dp)
                         .background(Color.LightGray, shape = CircleShape)
+                        .clickable(enabled = !isSpinning) {
+                            if (!isSpinning) {
+                                isSpinning = true
+                                selectedOption = ""
+                                coroutineScope.launch {
+                                    for (i in 1..20) {
+                                        rotation += Random.nextFloat() * 360
+                                        delay(100)
+                                    }
+                                    isSpinning = false
+
+                                    val finalRotation = (rotation % 360f)
+                                    val sliceAngle = 360f / options.size
+
+                                    val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
+
+                                    selectedOption = options[selectedIndex]
+
+                                    delay(3000)
+                                    navController.navigate("${Screens.ACTION.route}/$selectedOption")
+                                    roulettePreferences.saveRouletteSpinDate(LocalDate.now())
+                                }
+                            }
+                        }
                 ) {
                     // ルーレットの描画
                     Canvas(modifier = Modifier.size(250.dp)) {
@@ -304,6 +332,9 @@ fun RouletteWeekendScreen(
 
                                 delay(3000)
                                 navController.navigate("${Screens.ACTION.route}/$selectedOption")
+
+                                // ルーレットを回した日を保存する
+                                roulettePreferences.saveRouletteSpinDate(LocalDate.now())
                             }
                         }
                     }, // ここでCard自体をクリック可能に

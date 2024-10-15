@@ -3,6 +3,7 @@ package com.example.roulettelife.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.time.LocalDate
 import java.util.Locale
 
 // SharedPreferencesでルーレットの目を管理
@@ -17,6 +18,7 @@ class RoulettePreferences(context: Context) {
         private const val DELETED_DEFAULT_ITEMS_KEY = "deleted_default_items"
         private const val PREFERENCES_NAME = "roulette_preferences"
         private const val LANGUAGE_PREF_KEY = "app_language"
+        private const val SPIN_DATES_KEY = "spin_dates"
     }
 
 
@@ -113,5 +115,25 @@ class RoulettePreferences(context: Context) {
     // 言語を取得する
     fun getLanguage(): String {
         return sharedPreferences.getString(LANGUAGE_PREF_KEY, Locale.getDefault().language) ?: Locale.getDefault().language
+    }
+
+    // ルーレットを回した日付を取得する
+    fun getRouletteSpinDates(): List<LocalDate> {
+        val datesString = sharedPreferences.getString(SPIN_DATES_KEY, "") ?: ""
+        return if (datesString.isNotBlank()) {
+            datesString.split(",").map { LocalDate.parse(it) }
+        } else {
+            emptyList()
+        }
+    }
+
+    // ルーレットを回した日付を保存する
+    fun saveRouletteSpinDate(date: LocalDate) {
+        val existingDates = getRouletteSpinDates().toMutableList()
+        if (!existingDates.contains(date)) {  // 同じ日付が重複しないように
+            existingDates.add(date)
+        }
+        val datesString = existingDates.joinToString(",") { it.toString() }  // LocalDate を文字列に変換して保存
+        sharedPreferences.edit().putString(SPIN_DATES_KEY, datesString).apply()
     }
 }
