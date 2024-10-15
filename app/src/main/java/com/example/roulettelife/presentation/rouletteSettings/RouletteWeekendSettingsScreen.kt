@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -152,15 +153,21 @@ fun RouletteWeekendSettingsScreen(
                         title = { Text(text = stringResource(id = R.string.new_item)) },
                         text = {
                             Column {
-                                Text(stringResource(id = R.string.new_item_sub_title))
+                                Text(
+                                    text = stringResource(id = R.string.new_item_sub_title),
+                                    fontSize = 16.sp  // 文字サイズを少し大きく設定
+                                )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 BasicTextField(
                                     value = newItem,
                                     onValueChange = { newItem = it },
                                     modifier = Modifier
                                         .fillMaxWidth()
+                                        .height(100.dp)
                                         .padding(8.dp)
                                         .background(Color.LightGray)
+                                        .padding(16.dp),
+                                    textStyle = TextStyle(fontSize = 16.sp)
                                 )
                             }
                         },
