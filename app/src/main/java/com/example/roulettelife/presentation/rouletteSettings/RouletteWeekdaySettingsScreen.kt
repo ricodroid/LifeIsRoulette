@@ -2,6 +2,7 @@ package com.example.roulettelife.presentation.rouletteSettings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RouletteWeekdaySettingsScreen(
     onHomeButtonClick: () -> Unit,
@@ -47,8 +52,7 @@ fun RouletteWeekdaySettingsScreen(
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットのリスト項目を保持する状態
-    var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekdayRouletteItems()) }
-
+    var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekdayRouletteItems().toMutableList()) }
     var newItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -71,32 +75,65 @@ fun RouletteWeekdaySettingsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // スクロール可能なリスト
-                // スクロール可能なリスト
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    // items(rouletteItems.size)を使ってListのサイズを渡す
-                    items(rouletteItems.size) { index ->
+                    items(rouletteItems.size, key = { index -> rouletteItems[index] }) { index ->
                         val item = rouletteItems[index]
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = item, style = MaterialTheme.typography.bodyLarge)
+                        val dismissState = rememberDismissState()
 
-                            IconButton(onClick = {
-                                // 項目を削除して、SharedPreferences を更新
-                                roulettePreferences.removeWeekdayRouletteItem(item)
-                                rouletteItems = roulettePreferences.getWeekdayRouletteItems().toList()
-                            }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete Item")
+                        SwipeToDismiss(
+                            state = dismissState,
+                            background = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(Color.Red)
+                                        .padding(8.dp),
+                                    contentAlignment = Alignment.CenterEnd
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete Item",
+                                        tint = Color.White
+                                    )
+                                }
+                            },
+                            directions = setOf(DismissDirection.EndToStart),
+                            dismissContent = {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color.White)
+                                        .padding(vertical = 4.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(text = item, style = MaterialTheme.typography.bodyLarge)
+
+                                    IconButton(onClick = {
+                                        // 項目を削除して、SharedPreferences を更新
+                                        roulettePreferences.removeWeekdayRouletteItem(item)
+                                        rouletteItems = rouletteItems.toMutableList().apply {
+                                            removeAt(index)  // インデックスで削除
+                                        }
+                                    }) {
+                                        Icon(Icons.Default.Delete, contentDescription = "Delete Item")
+                                    }
+                                }
                             }
+                        )
+
+                        // スワイプでアイテムが削除された場合の処理
+                        if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                            rouletteItems = rouletteItems.toMutableList().apply {
+                                removeAt(index)  // インデックスで削除
+                            }
+                            roulettePreferences.removeWeekdayRouletteItem(item)
                         }
+
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -126,7 +163,9 @@ fun RouletteWeekdaySettingsScreen(
                                     if (newItem.isNotBlank()) {
                                         // 新しいアイテムを追加し、SharedPreferences に保存
                                         roulettePreferences.saveWeekdayRouletteItems(newItem)
-                                        rouletteItems = roulettePreferences.getWeekdayRouletteItems().toList()  // リストを更新
+                                        rouletteItems = rouletteItems.toMutableList().apply {
+                                            add(newItem)  // 新しいアイテムをリストに追加
+                                        }
                                         newItem = ""  // 入力フィールドをクリア
                                         showDialog = false
                                     }
