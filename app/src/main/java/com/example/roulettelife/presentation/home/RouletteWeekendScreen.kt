@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -358,9 +361,9 @@ fun RouletteWeekendScreen(
                     ) {
                         // アイコンを追加
                         Icon(
-                            imageVector = Icons.Default.Favorite, // 好きなアイコンに変更可能
+                            imageVector = Icons.Default.Refresh, // 好きなアイコンに変更可能
                             contentDescription = null,
-                            tint = Color(0xFF6D6D6D), // アイコンの色
+                            tint = Color(0xFF007DC5), // アイコンの色
                             modifier = Modifier
                                 .size(40.dp)
                                 .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
@@ -398,9 +401,9 @@ fun RouletteWeekendScreen(
                     ) {
                         // アイコンを追加
                         Icon(
-                            imageVector = Icons.Default.Favorite, // 好きなアイコンに変更可能
+                            imageVector = Icons.Default.DateRange, // 好きなアイコンに変更可能
                             contentDescription = null,
-                            tint = Color(0xFF6D6D6D), // アイコンの色
+                            tint = Color(0xFFD93A49), // アイコンの色
                             modifier = Modifier
                                 .size(40.dp)
                                 .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加

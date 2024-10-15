@@ -7,12 +7,22 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +34,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -42,6 +56,7 @@ import com.example.roulettelife.data.local.RoulettePreferences
 import com.example.roulettelife.presentation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -133,10 +148,11 @@ fun RouletteWeekdayScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                modifier = Modifier.shadow(8.dp), // 影を追加
                 title = {
                     Text(
                         text = "Weekday Roulette",
-                        fontFamily = poppinsFontFamily,
+                        fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
                         color = Color.Blue
                     )
                 },
@@ -186,7 +202,7 @@ fun RouletteWeekdayScreen(
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0xFFFFAB91)
+                    containerColor = Color(0xFFF1F3F4)
                 )
             )
         },
@@ -194,7 +210,7 @@ fun RouletteWeekdayScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5DC))
+                    .background(Color(0xFFF1F3F4))
                     .padding(padding)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
@@ -203,16 +219,44 @@ fun RouletteWeekdayScreen(
                 Text(text = selectedOption,
                     fontFamily = poppinsFontFamily,
                     fontSize = 24.sp,
-                    modifier = Modifier.padding(18.dp)
+                    modifier = Modifier.padding(6.dp)
                 )
+
+                RouletteSpinCalendarScreen()
 
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .size(300.dp)
-                        .background(Color.LightGray, shape = CircleShape)
+                        .background(Color.White, shape = CircleShape)
+                        .clickable(enabled = !isSpinning) {
+                            if (!isSpinning) {
+                                isSpinning = true
+                                selectedOption = ""
+                                coroutineScope.launch {
+                                    for (i in 1..20) {
+                                        rotation += Random.nextFloat() * 360
+                                        delay(100)
+                                    }
+                                    isSpinning = false
+
+                                    val finalRotation = (rotation % 360f)
+                                    val sliceAngle = 360f / options.size
+
+                                    val selectedIndex =
+                                        ((360f - finalRotation) / sliceAngle).toInt() % options.size
+
+                                    selectedOption = options[selectedIndex]
+
+                                    delay(3000)
+                                    navController.navigate("${Screens.ACTION.route}/$selectedOption")
+                                    roulettePreferences.saveRouletteSpinDate(LocalDate.now())
+                                }
+                            }
+                        }
                 ) {
                     // ルーレットの描画
+                    // ルーレットのデザイン変更
                     Canvas(modifier = Modifier.size(250.dp)) {
                         val sliceAngle = 360f / options.size
                         val radius = size.minDimension / 2
@@ -223,10 +267,32 @@ fun RouletteWeekdayScreen(
                             textAlign = android.graphics.Paint.Align.CENTER
                         }
 
+                        // 影を追加する
+                        val shadowOffset = 10f
+                        val shadowColor = Color(0xFFAAAAAA)
+
+                        // 影の円を描く（少し外側）
+                        drawCircle(
+                            color = shadowColor,
+                            radius = radius,
+                            center = Offset(size.center.x + shadowOffset, size.center.y + shadowOffset),
+                            alpha = 0.5f
+                        )
+
+                        // ルーレットを描く
                         rotate(rotation) {
                             for (i in options.indices) {
+                                // グラデーションを追加
+                                val gradientShader = Brush.sweepGradient(
+                                    colors = listOf(
+                                        shuffledColors[i].copy(alpha = 1f),
+                                        shuffledColors[i].copy(alpha = 0.8f)
+                                    )
+                                )
+
+                                // グラデーションでアークを描く
                                 drawArc(
-                                    color = shuffledColors[i],
+                                    brush = gradientShader,
                                     startAngle = i * sliceAngle,
                                     sweepAngle = sliceAngle,
                                     useCenter = true
@@ -249,6 +315,7 @@ fun RouletteWeekdayScreen(
                                     Math.toRadians(textAngle.toDouble())
                                 ).toFloat()
 
+                                // テキストを描画
                                 drawContext.canvas.nativeCanvas.drawText(
                                     displayText,
                                     x,
@@ -276,50 +343,84 @@ fun RouletteWeekdayScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // ルーレットを回転させるボタン
-                Button(
-                    onClick = {
-                        if (!isSpinning) {
-                            isSpinning = true
-                            selectedOption = ""
-                            coroutineScope.launch {
-                                for (i in 1..20) {
-                                    rotation += Random.nextFloat() * 360
-                                    delay(100)
-                                }
-                                isSpinning = false
-
-                                val finalRotation = (rotation % 360f)
-                                val sliceAngle = 360f / options.size
-                                val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
-
-                                selectedOption = options[selectedIndex]
-
-                                delay(3000)
-                                navController.navigate("${Screens.ACTION.route}/$selectedOption")
-                            }
-                        }
-                    },
-                    enabled = !isSpinning,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE57373)),
+                // ルーレットを平日用にするボタン
+                Card(
+                    onClick = { onChangeRouletteButtonClick() }, // ここでCard自体をクリック可能に
                     modifier = Modifier
-                        .width(210.dp)
-                        .height(100.dp)
-                        .padding(16.dp)
+                        .width(200.dp)
+                        .height(65.dp)
+                        .padding(2.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                    ),
+
+                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
                 ) {
-                    Text(text = if (isSpinning) "Spinning..." else "Spin")
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // アイコンを追加
+                        Icon(
+                            imageVector = Icons.Default.Refresh, // 好きなアイコンに変更可能
+                            contentDescription = null,
+                            tint = Color(0xFF007DC5), // アイコンの色
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                        )
+                        // テキストを追加
+                        Text(
+                            text = "Change Weekday",
+                            color = Color(0xFF6D6D6D), // テキストの色
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                Button(onClick = { onChangeRouletteButtonClick() }) {
-                    Text(text = "Change Weekend")
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(onClick = { onDiaryButtonClick() }) {
-                    Text(text = "Diary")
+                Card(
+                    onClick = { onDiaryButtonClick() }, // ここでCard自体をクリック可能に
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(66.dp)
+                        .padding(2.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                    ),
+                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // アイコンを追加
+                        Icon(
+                            imageVector = Icons.Default.DateRange, // 好きなアイコンに変更可能
+                            contentDescription = null,
+                            tint = Color(0xFFD93A49), // アイコンの色
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                        )
+                        // テキストを追加
+                        Text(
+                            text = "Diary",
+                            color = Color(0xFF6D6D6D), // テキストの色
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
