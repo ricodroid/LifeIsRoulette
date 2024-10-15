@@ -39,5 +39,9 @@
     <!--  RouletteWeekendSettingsScreen  -->
     <string name="weekday_item">平日のルーレット項目</string>
     <string name="weekend_item">休日のルーレット項目</string>
+    <string name="new_item">新しい項目を追加</string>
+    <string name="new_item_sub_title">ルーレットに追加する項目を入力してください。</string>
+    <string name="add_item">追加</string>
+    <string name="cancel">キャンセル</string>
 
 </resources>

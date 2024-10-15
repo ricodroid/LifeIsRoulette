@@ -122,7 +122,7 @@ fun DiaryListScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(Color.Red)
+                                    .background(Color(0xFFDC143C))
                                     .padding(8.dp),
                                 contentAlignment = Alignment.CenterEnd
                             ) {

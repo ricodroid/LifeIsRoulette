@@ -10,17 +10,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Card
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,10 +41,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
 
@@ -52,7 +62,11 @@ fun RouletteWeekdaySettingsScreen(
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットのリスト項目を保持する状態
-    var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekdayRouletteItems().toMutableList()) }
+    var rouletteItems by remember {
+        mutableStateOf(
+            roulettePreferences.getWeekdayRouletteItems().toMutableList()
+        )
+    }
     var newItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -71,7 +85,10 @@ fun RouletteWeekdaySettingsScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(id = R.string.weekday_item), style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = stringResource(id = R.string.weekday_item),
+                    style = MaterialTheme.typography.titleMedium
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // スクロール可能なリスト
@@ -90,8 +107,9 @@ fun RouletteWeekdaySettingsScreen(
                                 Box(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .background(Color.Red)
-                                        .padding(8.dp),
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(Color(0xFFDC143C))
+                                        .padding(10.dp),
                                     contentAlignment = Alignment.CenterEnd
                                 ) {
                                     Icon(
@@ -106,21 +124,26 @@ fun RouletteWeekdaySettingsScreen(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .background(Color.White)
-                                        .padding(vertical = 4.dp),
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(Color.White)  // アイテム自体の背景を白に設定
+                                        .padding(vertical = 10.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(text = item, style = MaterialTheme.typography.bodyLarge)
-
+                                    Text(
+                                        modifier = Modifier.padding(start = 16.dp, top = 5.dp, bottom = 5.dp),
+                                        text = item,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color =  Color(0xFF333333)
+                                    )
                                     IconButton(onClick = {
-                                        // 項目を削除して、SharedPreferences を更新
+                                        // 項目を削除して、ローカルリストとSharedPreferences を更新
                                         roulettePreferences.removeWeekdayRouletteItem(item)
                                         rouletteItems = rouletteItems.toMutableList().apply {
                                             removeAt(index)  // インデックスで削除
                                         }
                                     }) {
-                                        Icon(Icons.Default.Delete, contentDescription = "Delete Item")
+//                                        Icon(Icons.Default.Delete, contentDescription = "Delete Item")
                                     }
                                 }
                             }
@@ -142,10 +165,10 @@ fun RouletteWeekdaySettingsScreen(
                 if (showDialog) {
                     AlertDialog(
                         onDismissRequest = { showDialog = false },
-                        title = { Text(text = "新しい項目を追加") },
+                        title = { Text(text = stringResource(id = R.string.new_item)) },
                         text = {
                             Column {
-                                Text("ルーレットに追加する項目を入力してください")
+                                Text(stringResource(id = R.string.new_item_sub_title))
                                 Spacer(modifier = Modifier.height(8.dp))
                                 BasicTextField(
                                     value = newItem,
@@ -171,23 +194,56 @@ fun RouletteWeekdaySettingsScreen(
                                     }
                                 }
                             ) {
-                                Text("追加")
+                                Text(stringResource(id = R.string.add_item))
                             }
                         },
                         dismissButton = {
                             Button(onClick = { showDialog = false }) {
-                                Text("キャンセル")
+                                Text(stringResource(id = R.string.cancel))
                             }
                         }
                     )
                 }
 
-
-
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(onClick = { onChangeWeekendButtonClick() }) {
-                    Text(text = "change！")
+                // Cardを使用してボタンを表示
+                androidx.compose.material3.Card(
+                    onClick = { onChangeWeekendButtonClick() }, // ここでCard自体をクリック可能に
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(66.dp)
+                        .padding(2.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                    ),
+                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // アイコンを追加
+                        Icon(
+                            imageVector = Icons.Default.Refresh, // 好きなアイコンに変更可能
+                            contentDescription = null,
+                            tint = Color(0xFF007DC5), // アイコンの色
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
+                        )
+                        // テキストを追加
+                        Text(
+                            text = "Change Weekend",
+                            color = Color(0xFF6D6D6D), // テキストの色
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

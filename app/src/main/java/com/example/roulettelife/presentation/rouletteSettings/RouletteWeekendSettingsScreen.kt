@@ -88,7 +88,7 @@ fun RouletteWeekendSettingsScreen(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .clip(RoundedCornerShape(10.dp))
-                                        .background(Color.Red)
+                                        .background(Color(0xFFDC143C))
                                         .padding(10.dp),
                                     contentAlignment = Alignment.CenterEnd
                                 ) {
@@ -149,10 +149,10 @@ fun RouletteWeekendSettingsScreen(
                 if (showDialog) {
                     AlertDialog(
                         onDismissRequest = { showDialog = false },
-                        title = { Text(text = "新しい項目を追加") },
+                        title = { Text(text = stringResource(id = R.string.new_item)) },
                         text = {
                             Column {
-                                Text("ルーレットに追加する項目を入力してください")
+                                Text(stringResource(id = R.string.new_item_sub_title))
                                 Spacer(modifier = Modifier.height(8.dp))
                                 BasicTextField(
                                     value = newItem,
@@ -178,12 +178,12 @@ fun RouletteWeekendSettingsScreen(
                                     }
                                 }
                             ) {
-                                Text("追加")
+                                Text(stringResource(id = R.string.add_item))
                             }
                         },
                         dismissButton = {
                             Button(onClick = { showDialog = false }) {
-                                Text("キャンセル")
+                                Text(stringResource(id = R.string.cancel))
                             }
                         }
                     )
