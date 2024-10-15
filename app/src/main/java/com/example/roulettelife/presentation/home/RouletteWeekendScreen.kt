@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -71,6 +72,8 @@ fun RouletteWeekendScreen(
 ) {
     val context = LocalContext.current
     val roulettePreferences = remember { RoulettePreferences(context) }
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
 
     // XML から defaultItems を取得
     val defaultItems = remember { context.resources.getStringArray(R.array.default_weekend_roulette_items).toMutableList() }
@@ -150,7 +153,16 @@ fun RouletteWeekendScreen(
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .background(Color.White.copy(alpha = 0.8f))  // 半透明の背景
+                    .width(screenWidth / 2)
+                    .clip(RoundedCornerShape(22.dp))
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = 0.3f),  // 上部をより透明に
+                                Color.White.copy(alpha = 0.6f)   // 下部をやや濃く
+                            )
+                        )
+                    )  // 半透明のすりガラス風背景
                     .padding(16.dp)
             ) {
                 Text(
@@ -187,6 +199,7 @@ fun RouletteWeekendScreen(
             Scaffold(
                 topBar = {
                     TopAppBar(
+                        modifier = Modifier.shadow(8.dp), // 影を追加
                         title = {
                             Text(
                                 text = "Weekend Roulette",
@@ -218,6 +231,9 @@ fun RouletteWeekendScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
+                        RouletteSpinCalendarScreen()
+
                         Text(
                             text = selectedOption,
                             fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
