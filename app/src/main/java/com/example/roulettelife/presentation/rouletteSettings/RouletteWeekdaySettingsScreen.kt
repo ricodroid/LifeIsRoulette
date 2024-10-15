@@ -182,12 +182,7 @@ fun RouletteWeekdaySettingsScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // 設定画面に移動するボタン
-                Button(onClick = { onHomeButtonClick() }) {
-                    Text(text = "Go to Roulette")
-                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
