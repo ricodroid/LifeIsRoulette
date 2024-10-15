@@ -30,7 +30,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -140,6 +142,7 @@ fun RouletteWeekendScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                modifier = Modifier.shadow(8.dp), // 影を追加
                 title = {
                     Text(
                         text = "Weekend Roulette",
@@ -194,7 +197,7 @@ fun RouletteWeekendScreen(
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0xFFFFAB91)
+                    containerColor = Color(0xFFF1F3F4)
                 )
             )
         },
@@ -202,16 +205,16 @@ fun RouletteWeekendScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5DC))
+                    .background(Color(0xFFF1F3F4))
                     .padding(padding)
-                    .padding(16.dp),
+                    .padding(13.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = selectedOption,
                     fontFamily = poppinsFontFamily,
                     fontSize = 24.sp,
-                    modifier = Modifier.padding(18.dp)
+                    modifier = Modifier.padding(6.dp)
                 )
 
                 RouletteSpinCalendarScreen()
@@ -220,7 +223,7 @@ fun RouletteWeekendScreen(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .size(300.dp)
-                        .background(Color.LightGray, shape = CircleShape)
+                        .background(Color.White, shape = CircleShape)
                         .clickable(enabled = !isSpinning) {
                             if (!isSpinning) {
                                 isSpinning = true
@@ -235,7 +238,8 @@ fun RouletteWeekendScreen(
                                     val finalRotation = (rotation % 360f)
                                     val sliceAngle = 360f / options.size
 
-                                    val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
+                                    val selectedIndex =
+                                        ((360f - finalRotation) / sliceAngle).toInt() % options.size
 
                                     selectedOption = options[selectedIndex]
 
@@ -257,6 +261,19 @@ fun RouletteWeekendScreen(
                             textAlign = android.graphics.Paint.Align.CENTER
                         }
 
+                        // 影を追加する
+                        val shadowOffset = 10f // 影のオフセット
+                        val shadowColor = Color(0xFFAAAAAA) // 影の色
+
+                        // 影の円を描く（少し外側）
+                        drawCircle(
+                            color = shadowColor,
+                            radius = radius,
+                            center = Offset(size.center.x + shadowOffset, size.center.y + shadowOffset),
+                            alpha = 0.5f // 影の透明度を調整
+                        )
+
+                        // ルーレットを描く
                         rotate(rotation) {
                             for (i in options.indices) {
                                 drawArc(
@@ -283,6 +300,7 @@ fun RouletteWeekendScreen(
                                     Math.toRadians(textAngle.toDouble())
                                 ).toFloat()
 
+                                // テキストを描画
                                 drawContext.canvas.nativeCanvas.drawText(
                                     displayText,
                                     x,
@@ -292,6 +310,8 @@ fun RouletteWeekendScreen(
                             }
                         }
                     }
+
+
 
                     // ポインターを描画
                     Canvas(modifier = Modifier
@@ -311,66 +331,7 @@ fun RouletteWeekendScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Card(
-                    onClick = {
-                        if (!isSpinning) {
-                            isSpinning = true
-                            selectedOption = ""
-                            coroutineScope.launch {
-                                for (i in 1..20) {
-                                    rotation += Random.nextFloat() * 360
-                                    delay(100)
-                                }
-                                isSpinning = false
 
-                                val finalRotation = (rotation % 360f)
-                                val sliceAngle = 360f / options.size
-
-                                val selectedIndex = ((360f - finalRotation) / sliceAngle).toInt() % options.size
-
-                                selectedOption = options[selectedIndex]
-
-                                delay(3000)
-                                navController.navigate("${Screens.ACTION.route}/$selectedOption")
-
-                                // ルーレットを回した日を保存する
-                                roulettePreferences.saveRouletteSpinDate(LocalDate.now())
-                            }
-                        }
-                    }, // ここでCard自体をクリック可能に
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(65.dp)
-                        .padding(2.dp)
-                        .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFE57373)), // カードの背景色を指定
-                    elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // アイコンを追加
-                        Icon(
-                            imageVector = Icons.Default.Favorite, // 好きなアイコンに変更可能
-                            contentDescription = null,
-                            tint = Color(0xFFE57373), // アイコンの色
-                            modifier = Modifier
-                                .size(40.dp)
-                                .padding(end = 8.dp) // アイコンとテキストの間にスペースを追加
-                        )
-                        // テキストを追加
-                        Text(
-                            text = if (isSpinning) "Spinning..." else "Spin",
-                            color = Color(0xFF6D6D6D), // テキストの色
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -382,8 +343,11 @@ fun RouletteWeekendScreen(
                         .height(65.dp)
                         .padding(2.dp)
                         .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFF1F3F4)), // カードの背景色を指定
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                    ),
+
                     elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
                 ) {
                     Row(
@@ -420,8 +384,10 @@ fun RouletteWeekendScreen(
                         .height(66.dp)
                         .padding(2.dp)
                         .shadow(8.dp, shape = RoundedCornerShape(16.dp))
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFF1F3F4)), // カードの背景色を指定
+                        .clip(RoundedCornerShape(16.dp)),
+                            colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFFEF9) // 背景色を #FFFEF9 に変更
+                            ),
                     elevation = CardDefaults.cardElevation(8.dp) // elevationの修正
                 ) {
                     Row(
