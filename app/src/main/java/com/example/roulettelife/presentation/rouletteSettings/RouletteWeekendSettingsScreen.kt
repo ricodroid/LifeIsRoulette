@@ -4,9 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RouletteWeekendSettingsScreen(
     onHomeButtonClick: () -> Unit,
@@ -28,7 +33,7 @@ fun RouletteWeekendSettingsScreen(
     val roulettePreferences = remember { RoulettePreferences(context) }
 
     // ルーレットのリスト項目を保持する状態
-    var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekendRouletteItems()) }
+    var rouletteItems by remember { mutableStateOf(roulettePreferences.getWeekendRouletteItems().toMutableList()) }
     var newItem by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -56,27 +61,60 @@ fun RouletteWeekendSettingsScreen(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    // items(rouletteItems.size)を使ってListのサイズを渡す
-                    items(rouletteItems.size) { index ->
+                    items(rouletteItems.size, key = { index -> rouletteItems[index] }) { index ->  // keyとして各アイテムのテキストを使用
                         val item = rouletteItems[index]
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            // bodyMedium -> bodyLarge などに変更
-                            Text(text = item, style = MaterialTheme.typography.bodyLarge)
+                        val dismissState = rememberDismissState()
 
-                            IconButton(onClick = {
-                                // 項目を削除して、SharedPreferences を更新
-                                roulettePreferences.removeWeekendRouletteItem(item)
-                                rouletteItems = roulettePreferences.getWeekendRouletteItems().toList()
-                            }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete Item")
+                        SwipeToDismiss(
+                            state = dismissState,
+                            background = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(Color.Red)
+                                        .padding(8.dp),
+                                    contentAlignment = Alignment.CenterEnd
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete Item",
+                                        tint = Color.White
+                                    )
+                                }
+                            },
+                            directions = setOf(DismissDirection.EndToStart),
+                            dismissContent = {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color.White)  // アイテム自体の背景を白に設定
+                                        .padding(vertical = 4.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(text = item, style = MaterialTheme.typography.bodyLarge)
+
+                                    IconButton(onClick = {
+                                        // 項目を削除して、ローカルリストとSharedPreferencesを更新
+                                        roulettePreferences.removeWeekendRouletteItem(item)
+                                        rouletteItems = rouletteItems.toMutableList().apply {
+                                            removeAt(index)  // インデックスで削除
+                                        }
+                                    }) {
+                                        Icon(Icons.Default.Delete, contentDescription = "Delete Item")
+                                    }
+                                }
                             }
+                        )
+
+                        if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                            // リストを更新し、SharedPreferencesから削除
+                            rouletteItems = rouletteItems.toMutableList().apply {
+                                removeAt(index)  // インデックスで削除
+                            }
+                            roulettePreferences.removeWeekendRouletteItem(item)
                         }
+
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -106,7 +144,7 @@ fun RouletteWeekendSettingsScreen(
                                     if (newItem.isNotBlank()) {
                                         // 新しいアイテムを追加し、SharedPreferences に保存
                                         roulettePreferences.saveWeekendRouletteItems(newItem)
-                                        rouletteItems = roulettePreferences.getWeekendRouletteItems().toList()  // リストを更新して、List<String>を確保
+                                        rouletteItems = roulettePreferences.getWeekendRouletteItems().toMutableList()  // リストを更新
                                         newItem = ""  // 入力フィールドをクリア
                                         showDialog = false
                                     }
