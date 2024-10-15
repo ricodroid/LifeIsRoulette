@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
@@ -66,7 +67,7 @@ fun RouletteWeekdaySettingsScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "平日の項目", style = MaterialTheme.typography.titleMedium)
+                Text(text = stringResource(id = R.string.weekday_item), style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // スクロール可能なリスト

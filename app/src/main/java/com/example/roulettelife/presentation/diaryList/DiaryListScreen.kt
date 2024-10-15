@@ -41,6 +41,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,10 +65,22 @@ fun DiaryListScreen(
 
     val diaryList = diaryEntries.entries.toList()
 
+    val customFontFamily = FontFamily(
+        Font(R.font.roboto_conde)
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.diary)) },
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.diary),
+                        style = TextStyle(
+                            fontFamily = customFontFamily,
+                            fontSize = 20.sp  // フォントサイズの調整も可能
+                        )
+                    )
+                },
                 actions = {
                     IconButton(onClick = { onRouletteButtonClick() }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")

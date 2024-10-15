@@ -35,4 +35,9 @@
     <!--  DiaryListScreen  -->
     <string name="diary">日記</string>
     <string name="not_available">日付がありません</string>
+
+    <!--  RouletteWeekendSettingsScreen  -->
+    <string name="weekday_item">平日のルーレット項目</string>
+    <string name="weekend_item">休日のルーレット項目</string>
+
 </resources>

@@ -33,4 +33,9 @@
     <string name="diary">Diary</string>
     <string name="not_available">Date not available</string>
 
+    <!--  RouletteWeekendSettingsScreen  -->
+    <string name="weekday_item">Weekday Roulette Items</string>
+    <string name="weekend_item">Weekend Roulette Items</string>
+
+
 </resources>
