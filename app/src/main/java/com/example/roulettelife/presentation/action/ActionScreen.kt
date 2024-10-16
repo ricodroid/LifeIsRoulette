@@ -4,12 +4,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -33,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
+import com.example.roulettelife.animation.DancingDotsIndicator
 import com.example.roulettelife.button.CustomToggleSwitch
 import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
@@ -45,7 +44,6 @@ import java.util.*
 // 今日のハイライトは削除する
 // Listもインスタのように写真メインにする
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun ActionScreen(
     selectedItem: String,
@@ -111,7 +109,7 @@ fun ActionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F8FF))  // モダンなダーク背景
+            .background(Color(0xfff8f8ff))  // モダンなダーク背景
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -149,6 +147,7 @@ fun ActionScreen(
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )
 
+        // カスタムトグルスイッチ
         CustomToggleSwitch(
             isOn = isOn,
             onToggle = { newState ->
@@ -159,6 +158,9 @@ fun ActionScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(62.dp))
+
+        // 踊るインジケーターを追加
+        DancingDotsIndicator()
     }
 }
