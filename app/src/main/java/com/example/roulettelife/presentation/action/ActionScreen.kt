@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.roulettelife.R
-import com.example.roulettelife.button.PulsatingRainbowButton
+import com.example.roulettelife.button.CustomToggleSwitch
 import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
 import java.text.SimpleDateFormat
@@ -51,6 +55,7 @@ fun ActionScreen(
     val currentDate = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(Date())  // 日付フォーマットを英語に変更
     val context = LocalContext.current
     val diaryPreferences = DiaryPreferences(context)
+    var isOn by remember { mutableStateOf(false) }
 
     // LaunchedEffectで画面表示時の処理を実行
     LaunchedEffect(selectedItem) {
@@ -155,9 +160,13 @@ fun ActionScreen(
 //            textAlign = TextAlign.Center  // テキストを中央寄せに設定
 //        )
 
-        PulsatingRainbowButton(
-            onClick = {
-                photoLauncher.launch(null)  // カメラを起動する
+        CustomToggleSwitch(
+            isOn = isOn,
+            onToggle = { newState ->
+                isOn = newState  // スイッチの状態を更新
+                if (isOn) {
+                    photoLauncher.launch(null)  // スイッチがONになった時にカメラを起動
+                }
             }
         )
 
