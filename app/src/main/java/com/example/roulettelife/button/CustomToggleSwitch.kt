@@ -8,6 +8,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.runtime.*
@@ -15,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -27,12 +34,18 @@ fun CustomToggleSwitch(isOn: Boolean, onToggle: (Boolean) -> Unit) {
     val swipeableState = rememberSwipeableState(initialValue = if (isOn) 1 else 0)
 
     // スワイプ時の範囲を計算
-    val sizePx = with(LocalDensity.current) { 120.dp.toPx() } // スイッチの幅をpxに変換
+    val sizePx = with(LocalDensity.current) { 250.dp.toPx() } // スイッチの幅をpxに変換
     val anchors = mapOf(0f to 0, sizePx to 1)  // 0からスイッチ幅までの範囲でスワイプ
 
-    // 背景色の設定
-    val backgroundColor = if (swipeableState.currentValue == 1) Color(0xFF4CAF50) else Color(0xFFD6D6D6)
+    // 色を線形補間 (lerp) で計算
+    val fraction = (swipeableState.offset.value / sizePx).coerceIn(0f, 1f)  // 0～1の範囲に正規化
+
+    val backgroundColor = androidx.compose.ui.graphics.lerp(Color(0xffeee9e6), Color(0xffeddc44), fraction)
+    // トグルの色設定
     val toggleColor = Color.White
+
+    // アイコンを切り替え
+    val icon: ImageVector = if (swipeableState.currentValue == 1) Icons.Filled.CheckCircle else Icons.Filled.Refresh
 
     // スワイプ完了時に状態を監視してonToggleを呼び出す
     LaunchedEffect(swipeableState.targetValue) {
@@ -46,10 +59,10 @@ fun CustomToggleSwitch(isOn: Boolean, onToggle: (Boolean) -> Unit) {
     // スイッチ全体のデザイン
     Box(
         modifier = Modifier
-            .width(120.dp)  // 幅を拡大
-            .height(60.dp)  // 高さを拡大
+            .width(250.dp)
+            .height(65.dp)
             .clip(RoundedCornerShape(30.dp))  // pill shape
-            .background(backgroundColor)  // 背景色
+            .background(backgroundColor, shape = RoundedCornerShape(30.dp))  // 背景色とShapeを指定
             .swipeable(  // スワイプジェスチャーを検知
                 state = swipeableState,
                 anchors = anchors,
@@ -62,9 +75,18 @@ fun CustomToggleSwitch(isOn: Boolean, onToggle: (Boolean) -> Unit) {
         Box(
             modifier = Modifier
                 .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }  // スワイプ位置を調整
-                .size(60.dp)  // トグルのサイズを大きく
+                .size(65.dp)  // トグルのサイズを大きく
                 .clip(CircleShape)
-                .background(toggleColor)
-        )
+                .background(toggleColor),
+            contentAlignment = Alignment.Center
+        ) {
+            // アイコンを追加
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.Gray,  // アイコンの色
+                modifier = Modifier.size(24.dp)  // アイコンのサイズ
+            )
+        }
     }
 }
