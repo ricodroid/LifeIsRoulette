@@ -8,8 +8,15 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -102,48 +109,65 @@ fun ActionScreen(
 
     // カスタムフォントを設定（Poppinsなどを使用）
     val poppinsFontFamily = FontFamily(
-        Font(R.font.poppins_regular, FontWeight.Normal)
+        Font(R.font.open_sans, FontWeight.Normal)
     )
 
     // UI構成
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xfff8f8ff))  // モダンなダーク背景
+            .background(Color(0xFFF5F5F5))  // 柔らかくて繊細な背景色
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = selectedItem,
-            fontSize = 26.sp,
-            fontStyle = FontStyle.Italic,
-            fontFamily = poppinsFontFamily,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFED1A3D),
-            modifier = Modifier.padding(bottom = 24.dp),
-            textAlign = TextAlign.Center  // テキストを中央寄せに設定
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp), // テキストと下線の間隔を調整
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            // テキスト
+            Text(
+                text = selectedItem,
+                fontSize = 30.sp,
+                fontStyle = FontStyle.Normal,
+                fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
+                fontWeight = FontWeight.SemiBold,  // 少し控えめな太さ
+                color = Color(0xFF444444),  // 柔らかいグレー
+                textAlign = TextAlign.Center,  // テキストを中央寄せに設定
+                modifier = Modifier.padding(bottom = 15.dp)  // 下線とテキストのスペース
+            )
 
-        // 日付表示（モダンなフォントと色）
+            // おしゃれな下線
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)  // 下線の幅を調整
+                    .height(2.dp)  // 下線の高さ（太さ）を調整
+                    .background(Color(0xFFED1A3D).copy(alpha = 0.7f))  // 赤系の強調色に透明度を持たせた線
+                    .align(Alignment.BottomCenter)  // 下線を中央揃えに
+            )
+        }
+
+        // 日付表示（モダンでシンプルなフォントと色）
         Text(
             text = context.getString(R.string.today_item, currentDate),
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,  // 小さめのフォントサイズ
+            fontWeight = FontWeight.Normal,
             fontFamily = poppinsFontFamily,
-            color = Color(0xFF333333),
-            modifier = Modifier.padding(bottom = 24.dp),
+            color = Color(0xFF555555),  // 落ち着いたグレー
+            modifier = Modifier.padding(bottom = 16.dp),
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )
 
-        // メッセージ表示（英語に翻訳）
+        // メッセージ表示（シンプルで優しいフォントと色）
         Text(
             text = stringResource(id = R.string.lets_turn),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
             fontFamily = poppinsFontFamily,
-            color = Color(0xFF333333),
-            modifier = Modifier.padding(bottom = 24.dp),
+            color = Color(0xFF666666),  // 落ち着いたトーン
+            modifier = Modifier.padding(bottom = 16.dp),
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )
 
@@ -158,9 +182,9 @@ fun ActionScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(62.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
-        // 踊るインジケーターを追加
+        // 踊るインジケーターを追加（柔らかい色でシンプルに）
         DancingDotsIndicator()
     }
 }

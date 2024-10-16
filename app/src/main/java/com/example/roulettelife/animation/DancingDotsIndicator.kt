@@ -23,10 +23,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 
+
 @Composable
 fun DancingDotsIndicator() {
-    val dotSize = 12.dp
-    val spaceBetween = 8.dp
+    val dotSize = 8.dp
+    val spaceBetween = 6.dp
 
     // アニメーション用のタイマー
     val infiniteTransition = rememberInfiniteTransition()
@@ -34,25 +35,25 @@ fun DancingDotsIndicator() {
     // 3つの円のそれぞれの上下動アニメーション
     val dot1Offset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -10f,
+        targetValue = -6f,
         animationSpec = infiniteRepeatable(
-            animation = tween(400, easing = FastOutSlowInEasing),
+            animation = tween(600, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
     val dot2Offset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -10f,
+        targetValue = -6f,
         animationSpec = infiniteRepeatable(
-            animation = tween(400, easing = FastOutSlowInEasing, delayMillis = 150),
+            animation = tween(600, easing = FastOutSlowInEasing, delayMillis = 100),
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
     val dot3Offset by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -10f,
+        targetValue = -6f,
         animationSpec = infiniteRepeatable(
-            animation = tween(400, easing = FastOutSlowInEasing, delayMillis = 300),
+            animation = tween(600, easing = FastOutSlowInEasing, delayMillis = 200),
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
@@ -67,7 +68,7 @@ fun DancingDotsIndicator() {
             modifier = Modifier
                 .size(dotSize)
                 .offset(y = dot1Offset.dp)
-                .background(Color.Gray, shape = CircleShape)
+                .background(Color.LightGray, shape = CircleShape)
         )
 
         Spacer(modifier = Modifier.width(spaceBetween))
@@ -76,7 +77,7 @@ fun DancingDotsIndicator() {
             modifier = Modifier
                 .size(dotSize)
                 .offset(y = dot2Offset.dp)
-                .background(Color.Gray, shape = CircleShape)
+                .background(Color.LightGray, shape = CircleShape)
         )
 
         Spacer(modifier = Modifier.width(spaceBetween))
@@ -85,7 +86,7 @@ fun DancingDotsIndicator() {
             modifier = Modifier
                 .size(dotSize)
                 .offset(y = dot3Offset.dp)
-                .background(Color.Gray, shape = CircleShape)
+                .background(Color.LightGray, shape = CircleShape)
         )
     }
 }
