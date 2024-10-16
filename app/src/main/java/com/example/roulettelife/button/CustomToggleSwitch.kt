@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -31,7 +32,7 @@ fun CustomToggleSwitch(isOn: Boolean, onToggle: (Boolean) -> Unit) {
 
     // スワイプに基づいて色を補間
     val fraction = (swipeableOffset / sizePx).coerceIn(0f, 1f)  // 0～1の範囲に正規化
-    val backgroundColor = androidx.compose.ui.graphics.lerp(Color(0xffeee9e6), Color(0xffeddc44), fraction)
+    val backgroundColor = androidx.compose.ui.graphics.lerp( Color(0xfffafdff), Color(0xffffff00), fraction)
     val toggleColor = Color.White
 
     // スワイプの進行に応じてトグル位置を調整
@@ -43,8 +44,9 @@ fun CustomToggleSwitch(isOn: Boolean, onToggle: (Boolean) -> Unit) {
         modifier = Modifier
             .width(200.dp)
             .height(65.dp)
-            .clip(RoundedCornerShape(30.dp))  // pill shape
+            .clip(CircleShape)  // pill shape
             .background(backgroundColor, shape = RoundedCornerShape(30.dp))  // 背景色とShapeを指定
+            .shadow(4.dp, RoundedCornerShape(30.dp), ambientColor = Color.Gray.copy(alpha = 0.4f))  // 繊細な影を追加
             .draggable(
                 state = swipeableState,
                 orientation = Orientation.Horizontal,

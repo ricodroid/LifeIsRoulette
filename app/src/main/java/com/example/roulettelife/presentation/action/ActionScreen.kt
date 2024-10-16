@@ -149,17 +149,6 @@ fun ActionScreen(
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )
 
-        // 選択された項目の表示
-//        Text(
-//            text = stringResource(id = R.string.highlight),
-//            fontSize = 22.sp,
-//            fontStyle = FontStyle.Italic,
-//            fontFamily = poppinsFontFamily,
-//            color = Color(0xFF333333),
-//            modifier = Modifier.padding(bottom = 12.dp),
-//            textAlign = TextAlign.Center  // テキストを中央寄せに設定
-//        )
-
         CustomToggleSwitch(
             isOn = isOn,
             onToggle = { newState ->
