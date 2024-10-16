@@ -215,7 +215,7 @@ fun RouletteWeekdayScreen(
                             )  {
                                 Text(
                                     text = "Weekend Roulette",
-                                    fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
+                                    fontFamily = FontFamily(Font(R.font.roboto_conde, FontWeight.Normal)),
                                     color = Color(0xFF6699CC)
                                 )
                             }
@@ -249,7 +249,7 @@ fun RouletteWeekdayScreen(
 
                         Text(
                             text = selectedOption,
-                            fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
+                            fontFamily = FontFamily(Font(R.font.round_text, FontWeight.Normal)),
                             fontSize = 24.sp,
                             modifier = Modifier.padding(6.dp)
                         )
