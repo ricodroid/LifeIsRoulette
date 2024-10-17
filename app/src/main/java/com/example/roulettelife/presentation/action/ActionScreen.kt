@@ -129,14 +129,17 @@ fun ActionScreen(
         ) {
             // テキスト
             Text(
-                text = selectedItem,
+                text = "$selectedItem !",
                 fontSize = 30.sp,
                 fontStyle = FontStyle.Normal,
-                fontFamily = FontFamily(Font(R.font.poppins_regular, FontWeight.Normal)),
-                fontWeight = FontWeight.SemiBold,  // 少し控えめな太さ
-                color = Color(0xFF444444),  // 柔らかいグレー
-                textAlign = TextAlign.Center,  // テキストを中央寄せに設定
-                modifier = Modifier.padding(bottom = 15.dp)  // 下線とテキストのスペース
+                fontFamily = FontFamily(Font(R.font.open_sans, FontWeight.Normal)),
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF3155A6),
+                textAlign = TextAlign.Center,
+                lineHeight = 40.sp,  // 行間の調整
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+                    .fillMaxWidth()
             )
 
             // おしゃれな下線
@@ -149,16 +152,20 @@ fun ActionScreen(
             )
         }
 
+        Spacer(modifier = Modifier.height(26.dp))
+
         // 日付表示（モダンでシンプルなフォントと色）
         Text(
             text = context.getString(R.string.today_item, currentDate),
-            fontSize = 20.sp,  // 小さめのフォントサイズ
+            fontSize = 22.sp,  // 小さめのフォントサイズ
             fontWeight = FontWeight.Normal,
             fontFamily = poppinsFontFamily,
             color = Color(0xFF555555),  // 落ち着いたグレー
             modifier = Modifier.padding(bottom = 16.dp),
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
 
         // メッセージ表示（シンプルで優しいフォントと色）
         Text(
@@ -171,6 +178,8 @@ fun ActionScreen(
             textAlign = TextAlign.Center  // テキストを中央寄せに設定
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
         // カスタムトグルスイッチ
         CustomToggleSwitch(
             isOn = isOn,
@@ -182,7 +191,7 @@ fun ActionScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(60.dp))
 
         // 踊るインジケーターを追加（柔らかい色でシンプルに）
         DancingDotsIndicator()
