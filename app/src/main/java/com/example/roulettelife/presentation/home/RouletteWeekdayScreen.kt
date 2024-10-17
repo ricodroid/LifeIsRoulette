@@ -205,7 +205,7 @@ fun RouletteWeekdayScreen(
                                 exit = fadeOut(animationSpec = tween(durationMillis = 1500))   // フェードアウトも2秒に設定
                             )  {
                                 Text(
-                                    text = "Weekend Roulette",
+                                    text = "Weekday Roulette",
                                     fontFamily = FontFamily(Font(R.font.menu_text, FontWeight.Normal)),
                                     color = Color(0xFF6699CC)
                                 )
@@ -312,7 +312,7 @@ fun RouletteWeekdayScreen(
 
                                         // 表示するテキストを制限（長すぎる場合はカットして"..."を追加）
                                         val displayText = if (options[i].length > 10) {
-                                            options[i].take(5) + "..."
+                                            options[i].take(4) + "..."
                                         } else {
                                             options[i]
                                         }
