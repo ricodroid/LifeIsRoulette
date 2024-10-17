@@ -2,20 +2,17 @@ package com.example.roulettelife.presentation.diaryList
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -53,7 +50,9 @@ import com.example.roulettelife.R
 import com.example.roulettelife.data.local.DiaryPreferences
 import com.example.roulettelife.presentation.Screens
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun DiaryListScreen(
     navController: NavController,
@@ -65,10 +64,6 @@ fun DiaryListScreen(
 
     val diaryList = diaryEntries.entries.toList()
 
-    val customFontFamily = FontFamily(
-        Font(R.font.roboto_conde)
-    )
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,8 +71,8 @@ fun DiaryListScreen(
                     Text(
                         text = stringResource(id = R.string.diary),
                         style = TextStyle(
-                            fontFamily = customFontFamily,
-                            fontSize = 20.sp  // フォントサイズの調整も可能
+                            fontFamily = FontFamily(Font(R.font.menu_text)),
+                            fontSize = 20.sp
                         )
                     )
                 },
@@ -89,11 +84,12 @@ fun DiaryListScreen(
             )
         },
         content = { padding ->
-            LazyColumn(
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3), // 3列に設定して正方形グリッドに
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp)
+                    .padding(4.dp) // 写真周りの余白
             ) {
                 items(diaryList.size) { index ->
                     val entry = diaryList[index]
@@ -111,7 +107,7 @@ fun DiaryListScreen(
                                 diaryPreferences.removeDiary(entry.key)
                                 diaryEntries = diaryPreferences.getAllDiaries()
                             } else {
-                                dismissState.reset()  // 削除を回避
+                                dismissState.reset()
                             }
                         }
                     }
@@ -122,8 +118,8 @@ fun DiaryListScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(Color(0xFFDC143C))
-                                    .padding(8.dp),
+                                    .background(Color(0xFF333333))
+                                    .padding(1.dp),
                                 contentAlignment = Alignment.CenterEnd
                             ) {
                                 Icon(
@@ -135,8 +131,8 @@ fun DiaryListScreen(
                         },
                         directions = setOf(DismissDirection.EndToStart),
                         dismissContent = {
-                            // アイテム自体の背景を白に設定
-                            DiaryListItem(
+                            // DiaryListItemを正方形の枠に表示する
+                            DiaryGridItem(
                                 photoUri = entry.key,
                                 diaryEntry = diaryText,
                                 diaryDate = diaryDate,
@@ -144,9 +140,8 @@ fun DiaryListScreen(
                                     navController.navigate(Screens.DIARY_DETAIL.createRoute(entry.key))
                                 },
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color.White)  // ここで背景を白に設定
-                                    .padding(8.dp)
+                                    .aspectRatio(1f)  // 正方形にするためのアスペクト比設定
+                                    .padding(1.dp)
                             )
                         }
                     )
@@ -157,47 +152,38 @@ fun DiaryListScreen(
 }
 
 @Composable
-fun DiaryListItem(
+fun DiaryGridItem(
     photoUri: String,
     diaryEntry: String,
     diaryDate: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier  // Modifierを引数として受け取る
+    modifier: Modifier = Modifier
 ) {
-    Row(
+    Column(
         modifier = modifier
-            .clickable(onClick = onClick),
-        horizontalArrangement = Arrangement.Start
+            .clickable(onClick = onClick)
+            .background(Color.White)
     ) {
-        // 写真を表示 (写真のURIが有効なら)
+        // 写真のURIが有効なら表示、正方形でトリミング
         if (photoUri.isNotEmpty()) {
             AsyncImage(
                 model = Uri.parse(photoUri),
                 contentDescription = stringResource(id = R.string.diary_photo),
                 modifier = Modifier
-                    .size(64.dp)
-                    .padding(end = 16.dp),
+                    .fillMaxWidth()
+                    .aspectRatio(1f), // 正方形にトリミング
                 contentScale = ContentScale.Crop
             )
         }
 
-        // 日記の一部と日付を表示
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            Text(
-                text = diaryEntry,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis  // テキストが長すぎる場合に省略
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = diaryDate,  // 日付を表示
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
-        }
+        // 日記の一部を表示（オプションとして）
+        Text(
+            text = diaryEntry,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(4.dp),
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
     }
 }
