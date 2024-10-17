@@ -25,6 +25,8 @@ object PermissionsHelper {
     private const val BLUETOOTH_PERMISSION_REQUEST_CODE = 1
     private const val GPS_ENABLE_REQUEST_CODE = 2
     private const val CAMERA_PERMISSION_REQUEST_CODE = 3
+    private const val WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 4
+
 
     // パーミッションの許可状態をログに出力する
     fun logPermissionStatus(context: Context) {
@@ -100,6 +102,11 @@ object PermissionsHelper {
 
         // カメラパーミッションを追加
         permissions.add(Manifest.permission.CAMERA)
+
+        // ストレージ書き込み権限を追加
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
 
         return permissions
     }

@@ -1,5 +1,6 @@
 package com.example.roulettelife
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -24,6 +25,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // ステータスバーの色を設定
+        window.statusBarColor = Color.parseColor("#F1F3F4")
 
         // アプリ起動時に権限の許可状態をログに表示
         PermissionsHelper.logPermissionStatus(this)
