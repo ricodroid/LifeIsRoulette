@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RouletteLife</string>
+    <string name="app_name">LifeIsRoulette</string>
 
     <!--  Permission  -->
     <string name="gps_dialog_title">This app requires GPS to be enabled.</string>
