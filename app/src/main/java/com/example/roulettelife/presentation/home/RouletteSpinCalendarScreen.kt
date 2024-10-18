@@ -2,7 +2,10 @@ package com.example.roulettelife.presentation.home
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,12 +20,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.roulettelife.R
 import com.example.roulettelife.data.local.RoulettePreferences
 import java.time.LocalDate
 import java.time.YearMonth
-
 @Composable
 fun RouletteSpinCalendarScreen() {
     val context = LocalContext.current
@@ -68,52 +75,73 @@ fun RouletteSpinCalendarScreen() {
         secondHalfDays.add(secondHalf)
     }
 
-    // グリッドの表示
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(12),  // 12列で表示
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        content = {
-            // 各月の前半（1日〜15日）を1列目〜12列目に表示
-            firstHalfDays.forEachIndexed { monthIndex, daysInFirstHalf ->
-                // この月の前半でスピンされた日を数える
-                val spunCountFirstHalf = daysInFirstHalf.count { it in spinDateSet }
-                val colorRatioFirstHalf = spunCountFirstHalf / daysInFirstHalf.size.toFloat()
-                val cellColorFirstHalf = lerp(Color.White, Color(0xFFFFA500), colorRatioFirstHalf)
+    val monthNames = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
-                item {
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .aspectRatio(1f)  // 正方形に設定
-                            .background(cellColorFirstHalf, shape = RoundedCornerShape(4.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-//                        Text(text = "${monthIndex + 1}月 前半", fontSize = 12.sp)
-                    }
-                }
-            }
-
-            // 各月の後半（16日〜月末）を1列目〜12列目の次の行に表示
-            secondHalfDays.forEachIndexed { monthIndex, daysInSecondHalf ->
-                // この月の後半でスピンされた日を数える
-                val spunCountSecondHalf = daysInSecondHalf.count { it in spinDateSet }
-                val colorRatioSecondHalf = spunCountSecondHalf / daysInSecondHalf.size.toFloat()
-                val cellColorSecondHalf = lerp(Color.White, Color(0xFFFFA500), colorRatioSecondHalf)
-
-                item {
-                    Box(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .aspectRatio(1f)  // 正方形に設定
-                            .background(cellColorSecondHalf, shape = RoundedCornerShape(4.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-//                        Text(text = "${monthIndex + 1}月 後半", fontSize = 12.sp)
-                    }
-                }
+    Column {
+        // ヘッダー行に月名を表示
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            monthNames.forEach { month ->
+                Text(
+                    text = month,
+                    fontFamily = FontFamily(Font(R.font.round_text, FontWeight.ExtraBold)),
+                    modifier = Modifier.weight(1f),
+                    fontSize = 10.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         }
-    )
+
+        // グリッドの表示
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(12),  // 12列で表示
+            modifier = Modifier
+                .fillMaxWidth()
+                ,
+            content = {
+                // 各月の前半（1日〜15日）を1列目〜12列目に表示
+                firstHalfDays.forEachIndexed { monthIndex, daysInFirstHalf ->
+                    // この月の前半でスピンされた日を数える
+                    val spunCountFirstHalf = daysInFirstHalf.count { it in spinDateSet }
+                    val colorRatioFirstHalf = spunCountFirstHalf / daysInFirstHalf.size.toFloat()
+                    val cellColorFirstHalf = lerp(Color.White, Color(0xFFFFA500), colorRatioFirstHalf)
+
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .aspectRatio(1f)  // 正方形に設定
+                                .background(cellColorFirstHalf, shape = RoundedCornerShape(4.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+//                            Text(text = "${monthIndex + 1}月 前半", fontSize = 12.sp)
+                        }
+                    }
+                }
+
+                // 各月の後半（16日〜月末）を1列目〜12列目の次の行に表示
+                secondHalfDays.forEachIndexed { monthIndex, daysInSecondHalf ->
+                    // この月の後半でスピンされた日を数える
+                    val spunCountSecondHalf = daysInSecondHalf.count { it in spinDateSet }
+                    val colorRatioSecondHalf = spunCountSecondHalf / daysInSecondHalf.size.toFloat()
+                    val cellColorSecondHalf = lerp(Color.White, Color(0xFFFFA500), colorRatioSecondHalf)
+
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .aspectRatio(1f)  // 正方形に設定
+                                .background(cellColorSecondHalf, shape = RoundedCornerShape(4.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+//                            Text(text = "${monthIndex + 1}月 後半", fontSize = 12.sp)
+                        }
+                    }
+                }
+            }
+        )
+    }
 }
