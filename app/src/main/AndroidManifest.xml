@@ -18,9 +18,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/diary_icon_round_round"
+        android:icon="@mipmap/diary_icon_round_2"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/diary_icon_round_round"
+        android:roundIcon="@mipmap/diary_icon_round_2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RouletteLife"
         tools:targetApi="31">
