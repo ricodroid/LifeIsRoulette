@@ -73,7 +73,8 @@ fun DiaryListScreen(
                         style = TextStyle(
                             fontFamily = FontFamily(Font(R.font.menu_text)),
                             fontSize = 20.sp
-                        )
+                        ),
+                        color = Color(0xFF6699CC)
                     )
                 },
                 actions = {
