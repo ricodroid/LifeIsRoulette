@@ -1,6 +1,7 @@
 package com.example.roulettelife.presentation.diary
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -97,7 +98,7 @@ fun DiaryScreen(
                 modifier = Modifier
                     .size(48.dp)  // サイズを指定
                     .clip(CircleShape)  // 丸くする
-                    .background(Color(0xFF3155A6))  // 背景色を指定（例: 紫色）
+                    .background(Color(0xFF3155A6))  // 背景色を指定（例: 青色）
             ) {
                 // アイコンボタン
                 IconButton(
@@ -105,6 +106,23 @@ fun DiaryScreen(
                         // DiaryPreferencesを使用して日記をSharedPreferencesに保存
                         diaryPreferences.saveDiary(photoUri, diaryText)
                         showDeleteDialog = true
+
+                        // SNSに共有するためのインテントを作成
+                        val sendIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, diaryText)
+                            type = "text/plain"
+                            // 画像も一緒に共有する場合
+                            if (photoUri.isNotEmpty()) {
+                                putExtra(Intent.EXTRA_STREAM, uri)
+                                type = "image/*"
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                        }
+
+                        // シェアメニューを表示
+                        val shareIntent = Intent.createChooser(sendIntent, "Share your diary")
+                        context.startActivity(shareIntent)
                     },
                     modifier = Modifier.fillMaxSize()  // ボタン全体に広げる
                 ) {
@@ -116,6 +134,7 @@ fun DiaryScreen(
                 }
             }
         }
+
 
     }
 
