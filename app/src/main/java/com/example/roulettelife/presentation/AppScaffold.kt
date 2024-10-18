@@ -33,7 +33,7 @@ fun AppScaffold(context: Context) {
     val selectedItem = diaryPreferences.getSelectedItem()
 
     // selectedItemがある場合はActionScreenへ遷移
-    LaunchedEffect(Unit) {
+    LaunchedEffect(navController) {
         if (!selectedItem.isNullOrBlank()) {
             navController.navigate("${Screens.ACTION.route}/$selectedItem")
         }
