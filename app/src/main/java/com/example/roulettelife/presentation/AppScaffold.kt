@@ -48,7 +48,6 @@ fun AppScaffold(context: Context) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun AppNavHost(
     navController: NavHostController,  // NavHostControllerを使用
