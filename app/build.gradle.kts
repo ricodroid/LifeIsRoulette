@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.roulettelife"
+    namespace = "com.ricodroid.roulettelife"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.roulettelife"
+        applicationId = "com.ricodroid.roulettelife"
         minSdk = 29
         targetSdk = 33
         versionCode = 1
