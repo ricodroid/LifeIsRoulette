@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.RouletteLife" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.RouletteLife" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- ライトモード用設定 -->
         <item name="android:windowLightStatusBar">true</item>
+        <!-- 共通のカスタム属性 -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
+
 </resources>
