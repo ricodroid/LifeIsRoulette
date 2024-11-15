@@ -1,11 +1,8 @@
 package com.ricodroid.roulettelife.presentation.action
 
-import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Environment
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -29,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.ricodroid.roulettelife.animation.DancingDotsIndicator
 import com.ricodroid.roulettelife.button.CustomToggleSwitch
@@ -37,6 +35,7 @@ import com.ricodroid.roulettelife.presentation.Screens
 import java.text.SimpleDateFormat
 import java.util.*
 import com.ricodroid.roulettelife.R
+import java.io.File
 
 // ハイライトを一番上にする。
 // Doneは二番目
@@ -54,6 +53,7 @@ fun ActionScreen(
     val context = LocalContext.current
     val diaryPreferences = DiaryPreferences(context)
     var isOn by remember { mutableStateOf(false) }
+    val photoUri = remember { mutableStateOf<Uri?>(null) }
 
     // LaunchedEffectで画面表示時の処理を実行
     LaunchedEffect(selectedItem) {
@@ -66,29 +66,9 @@ fun ActionScreen(
         }
     }
 
-    val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        fun savePhotoToExternalStorage(context: Context, bitmap: Bitmap): Uri {
-            val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, "photo_${System.currentTimeMillis()}.jpg")
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-            }
-
-            val resolver = context.contentResolver
-            val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-            uri?.let {
-                resolver.openOutputStream(it)?.let { outputStream ->
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    outputStream.close()
-                }
-            }
-
-            return uri ?: Uri.EMPTY
-        }
-
-        bitmap?.let {
-            val uri = savePhotoToExternalStorage(context, bitmap)
+    val photoLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success && photoUri.value != null) {
+            val uri = photoUri.value!!
             val diaryEntry = context.getString(R.string.completed_item, selectedItem)
             onPhotoSaved(uri, diaryEntry)
 
@@ -179,7 +159,9 @@ fun ActionScreen(
             onToggle = { newState ->
                 isOn = newState  // スイッチの状態を更新
                 if (isOn) {
-                    photoLauncher.launch(null)  // スイッチがONになった時にカメラを起動
+                    val uri = createImageFileUri(context) // 保存先のURIを作成
+                    photoUri.value = uri
+                    photoLauncher.launch(uri) // カメラを起動
                 }
             }
         )
@@ -190,3 +172,17 @@ fun ActionScreen(
         DancingDotsIndicator()
     }
 }
+
+fun createImageFileUri(context: Context): Uri {
+    val timestamp = System.currentTimeMillis()
+    val fileName = "photo_$timestamp.jpg"
+    val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val file = File(storageDir, fileName)
+
+    return FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        file
+    )
+}
+
