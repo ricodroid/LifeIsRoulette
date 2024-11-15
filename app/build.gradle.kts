@@ -13,8 +13,8 @@ android {
         applicationId = "com.ricodroid.roulettelife"
         minSdk = 29
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.3"
+        versionCode = 4
+        versionName = "v1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
