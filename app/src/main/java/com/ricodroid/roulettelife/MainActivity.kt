@@ -15,8 +15,8 @@ import com.ricodroid.roulettelife.data.local.LocaleUtils
 import com.ricodroid.roulettelife.data.local.RoulettePreferences
 import com.ricodroid.roulettelife.presentation.AppScaffold
 import com.ricodroid.roulettelife.presentation.permission.PermissionsHelper
-import com.ricodroid.roulettelife.presentation.permission.PermissionsHelper.isBluetoothEnabled
-import com.ricodroid.roulettelife.presentation.permission.PermissionsHelper.isGPSEnabled
+//import com.ricodroid.roulettelife.presentation.permission.PermissionsHelper.isBluetoothEnabled
+//import com.ricodroid.roulettelife.presentation.permission.PermissionsHelper.isGPSEnabled
 import com.ricodroid.roulettelife.ui.theme.RouletteLifeTheme
 
 
@@ -77,11 +77,11 @@ class MainActivity : ComponentActivity() {
         permissionLauncher.launch(requiredPermissions)
     }
 
-    private fun requestSystemPermissions() {
-        // BluetoothがOFFの場合にONを促す
-        if (!isBluetoothEnabled()) PermissionsHelper.enableBluetooth(this)
-
-        // GPSがOFFの場合にONを促す
-        if (!isGPSEnabled(this))  PermissionsHelper.enableGPS(this)
-    }
+//    private fun requestSystemPermissions() {
+//        // BluetoothがOFFの場合にONを促す
+//        if (!isBluetoothEnabled()) PermissionsHelper.enableBluetooth(this)
+//
+//        // GPSがOFFの場合にONを促す
+//        if (!isGPSEnabled(this))  PermissionsHelper.enableGPS(this)
+//    }
 }
