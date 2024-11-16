@@ -89,7 +89,7 @@ fun ActionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))  // 柔らかくて繊細な背景色
+            .background(Color(0xFFF5F5F5))
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

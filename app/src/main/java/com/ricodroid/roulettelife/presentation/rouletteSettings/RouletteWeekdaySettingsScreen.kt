@@ -79,6 +79,7 @@ fun RouletteWeekdaySettingsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color(0xFFFFF9E6))
                     .padding(it)
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Top,

@@ -88,6 +88,7 @@ fun DiaryListScreen(
                 columns = GridCells.Fixed(3), // 3列に設定して正方形グリッドに
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color(0xFFF1F3F4))
                     .padding(padding)
                     .padding(4.dp) // 写真周りの余白
             ) {

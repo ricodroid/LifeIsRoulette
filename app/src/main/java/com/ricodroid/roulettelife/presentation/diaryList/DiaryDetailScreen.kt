@@ -2,6 +2,7 @@ package com.ricodroid.roulettelife.presentation.diaryList
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +57,7 @@ fun DiaryDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF1F3F4))
             .padding(16.dp)
     ) {
         Column(
@@ -62,7 +65,7 @@ fun DiaryDetailScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),  // スクロール可能にする
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // 写真の表示（全体を表示できるようにする）
             if (photoUri.isNotEmpty()) {
@@ -87,12 +90,21 @@ fun DiaryDetailScreen(
                     .height(300.dp)  // 高さを固定
                     .padding(bottom = 16.dp)
                     .padding(horizontal = 8.dp)
-                .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState()),
                 enabled = isEditing,  // 編集モードがオンの場合のみ編集可能
                 textStyle = androidx.compose.ui.text.TextStyle(
-                    color = Color.Black
+                    color = Color(0xFF333333) // テキストの色を設定
+                ),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFFFF9E6), // フォーカス時の背景色
+                    unfocusedContainerColor = Color(0xFFFFF9E6), // 非フォーカス時の背景色
+                    disabledContainerColor = Color(0xFFFFF9E6), // 無効時の背景色
+                    focusedIndicatorColor = Color.Transparent, // フォーカス時の下線色
+                    unfocusedIndicatorColor = Color.Transparent, // 非フォーカス時の下線色
+                    disabledIndicatorColor = Color.Transparent // 無効時の下線色
                 )
             )
+
         }
 
         // 右下に丸い編集/完了ボタン

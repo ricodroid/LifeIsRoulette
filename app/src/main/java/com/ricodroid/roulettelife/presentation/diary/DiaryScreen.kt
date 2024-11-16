@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +55,7 @@ fun DiaryScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF1F3F4))
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -75,7 +77,9 @@ fun DiaryScreen(
             Text(
                 text = diaryEntry,
                 fontSize = 20.sp,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp),
+                color = Color(0xFF333333)
             )
         }
 
@@ -83,10 +87,16 @@ fun DiaryScreen(
             TextField(
                 value = diaryText,
                 onValueChange = { diaryText = it },
-                label = { Text(stringResource(id = R.string.enter_diary)) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFFFF9E6), // フォーカス時の背景色
+                    unfocusedContainerColor = Color(0xFFFFF9E6) // 非フォーカス時の背景色
+                ),
+                textStyle = androidx.compose.ui.text.TextStyle(
+                    color = Color(0xFF333333) // テキストの色を設定
+                )
             )
         }
 
@@ -96,7 +106,7 @@ fun DiaryScreen(
                 modifier = Modifier
                     .size(48.dp)  // サイズを指定
                     .clip(CircleShape)  // 丸くする
-                    .background(Color(0xFF3155A6))  // 背景色を指定（例: 青色）
+                    .background(Color(0xFF3155A6))
             ) {
                 // アイコンボタン
                 IconButton(
@@ -132,8 +142,6 @@ fun DiaryScreen(
                 }
             }
         }
-
-
     }
 
     // 削除確認ダイアログ

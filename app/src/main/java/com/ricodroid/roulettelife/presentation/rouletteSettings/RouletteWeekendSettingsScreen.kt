@@ -58,6 +58,7 @@ fun RouletteWeekendSettingsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
+                    .background(Color(0xFFFFF9E6))
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
