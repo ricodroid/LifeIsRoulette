@@ -50,6 +50,8 @@ import coil.compose.AsyncImage
 import com.ricodroid.roulettelife.R
 import com.ricodroid.roulettelife.data.local.DiaryPreferences
 import com.ricodroid.roulettelife.presentation.Screens
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class,
     ExperimentalMaterialApi::class
@@ -63,7 +65,21 @@ fun DiaryListScreen(
     val diaryPreferences = DiaryPreferences(context)
     var diaryEntries by remember { mutableStateOf(diaryPreferences.getAllDiaries()) }
 
-    val diaryList = diaryEntries.entries.toList()
+    val diaryList = diaryEntries.entries.toList().sortedByDescending { entry ->
+        // 値を改行で分割し、日付部分を取得
+        val diaryEntryWithDate = entry.value.split("\n")
+        val dateLine = diaryEntryWithDate.find { it.startsWith("Date:") } // "Date:" で始まる行を探す
+        val diaryDate = dateLine?.removePrefix("Date: ") // "Date: " を取り除く
+
+        // 日付文字列を Date に変換
+        diaryDate?.let {
+            try {
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it)?.time
+            } catch (e: Exception) {
+                null
+            }
+        } ?: 0L // 日付が無い場合は最小値
+    }
 
     Scaffold(
         topBar = {
