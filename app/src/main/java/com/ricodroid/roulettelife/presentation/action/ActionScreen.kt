@@ -173,10 +173,13 @@ fun ActionScreen(
     }
 }
 
+// URI作成関数
 fun createImageFileUri(context: Context): Uri {
     val timestamp = System.currentTimeMillis()
     val fileName = "photo_$timestamp.jpg"
     val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        ?: throw IllegalStateException("External files directory is not available")
+
     val file = File(storageDir, fileName)
 
     return FileProvider.getUriForFile(
