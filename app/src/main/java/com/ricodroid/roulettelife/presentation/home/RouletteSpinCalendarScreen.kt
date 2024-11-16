@@ -90,7 +90,8 @@ fun RouletteSpinCalendarScreen() {
                     fontFamily = FontFamily(Font(R.font.round_text, FontWeight.ExtraBold)),
                     modifier = Modifier.weight(1f),
                     fontSize = 10.sp,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color(0xFF555555)
                 )
             }
         }
